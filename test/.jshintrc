@@ -1,0 +1,25 @@
+{
+    "extends": "../.jshintrc",
+    "predef": [
+        "_",
+        "after",
+        "afterEach",
+        "before",
+        "beforeEach",
+        "chai",
+        "currentPath",
+        "d3",
+        "describe",
+        "expect",
+        "find",
+        "mocha",
+        "moment",
+        "it",
+        "require",
+        "setupForTesting",
+        "visit",
+        "Backbone",
+        "Handlebars",
+        "Marionette"
+    ]
+}

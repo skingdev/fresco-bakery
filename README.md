@@ -4,9 +4,10 @@
 
 After pulling the project from Github, you will need to setup your local
 environment to work with Node, Bower, and Grunt. Depending on your system,
-install Node.
+install [Node](http://nodejs.org/).
 
-Bower and Grunt should be installed as global packages:
+After Node is installed, install Bower and Grunt. These should be installed
+as global packages:
 
     npm install -g grunt-cli
     npm install -g bower

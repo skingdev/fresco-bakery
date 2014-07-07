@@ -12,7 +12,7 @@ There are many different technologies to use when creating a javascript single p
 
 ## Before you start the tutorial
 
-The tutorial uses a project on [GitHub](git@github.com:skingdev/fresco-bakery.git) as a starting point. After cloning that repository to your local machine, please follow the step in the README.md file for installing Node, Grunt and Bower.
+The tutorial uses a project on [GitHub](git@github.com:skingdev/fresco-bakery.git) as a starting point. After cloning that repository to your local machine, please follow the step in the [README.md](README.md) file for installing Node, Grunt and Bower.
 
 ## Components / Technologies
 

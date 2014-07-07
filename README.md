@@ -1,5 +1,9 @@
 # Fresco Bakery
 
+## Tutorial
+
+After you've completed the steps below for the installation, if you want, take a look at the [tutorial](tutorial.md) for a walkthrough and explanation of creating a sample web site based on this source code.
+
 ## Installation
 
 After pulling the project from Github, you will need to setup your local

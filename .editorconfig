@@ -5,17 +5,26 @@
 root = true
 
 
-[*]
-
-# Change these settings to your own preference
-indent_style = space
-indent_size = 4
-
 # We recommend you to keep these unchanged
-end_of_line = lf
+[*]
 charset = utf-8
-trim_trailing_whitespace = true
+end_of_line = lf
+indent_size = 4
+indent_style = space
 insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.hbs]
+indent_size = 2
+
+[*.js]
+indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.less]
+indent_size = 2
+
+[*.scss]
+indent_size = 2

@@ -14,7 +14,7 @@ var config = {
 
   folders: {
     app: 'app',
-    bower: 'app/bower_components',
+    bower: 'bower_components',
     devBuild: '.dev',
     dist: 'dist',
     pages: 'app/pages',

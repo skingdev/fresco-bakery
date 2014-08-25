@@ -2,6 +2,7 @@
 
 var Application = require('../application');
 var BaseController = require('./base');
+var DirectionsView = require('../views/directions/layout');
 var HomeView = require('../views/home/layout');
 var MenuItemsCollection = require('../collections/menu-items');
 var MenuItemsView = require('../views/menu/items');
@@ -17,6 +18,9 @@ module.exports = BaseController.extend({
 
   directions: function() {
     Backbone.history.navigate('#/directions');
+
+    var layout = new DirectionsView();
+    Application.app.content.show(layout);
   },
 
   menu: function() {

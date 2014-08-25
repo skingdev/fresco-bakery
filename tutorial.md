@@ -1,5 +1,22 @@
 # Fresco Bakery Tutorial
 
+**Table of Contents**
+
+- [Overview](#user-content-overview)
+- [Let's get this out of the way](#user-content-lets-get-this-out-of-the-way)
+- [Before you start the tutorial](#user-content-before-you-start-the-tutorial)
+- [Components / Technologies](#user-content-components--technologies)
+- [Project structure](#user-content-project-structure)
+    - [Folders](#user-content-folders)
+- [Let's get going](#user-content-lets-get-going)
+- [Application requirements](#user-content-application-requirements)
+- [Menu bar](#user-content-menu-bar)
+- [Main page (Home Page)](#user-content-main-page-home-page)
+- [Menu page](#user-content-menu-page)
+    - [Menu page - data/Collection/Model](#user-content-menu-page---datacollectionmodel)
+    - [Menu page - Views/Templates](#user-content-menu-page---viewstemplates)
+- [Directions page](#user-content-directions-page)
+
 ## Overview
 
 This tutorial covers the basics of creating a static website for a 

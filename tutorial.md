@@ -150,9 +150,9 @@ Our "customer" has given us the following requirements:
 
 So now that we have our requirements, let's start tackling them. The site will be structured with the menu at the top (right under our header), and as the user clicks on the menu options, we will just change the content that is being displayed in the area that is between the menu bar but above the footer. This area from now on will be referred to as the __main content area__. 
 
-## Menu
+## Menu bar
 
-Let's put the menu on. Bootstrap makes it easy for us to get some default styles in. Remember when doing web development that styles, colors, etc. can be easily modified at any time. If you don't have any wireframes to go off of, or even if you do, a client can change their mind once they see the site in action. The approach this tutorial is going to take is to concentrate up front on the functionality of the site, then there will be a section later that will focus on customizing the styles.
+Let's put the menu bar on. Bootstrap makes it easy for us to get some default styles in. Remember when doing web development that styles, colors, etc. can be easily modified at any time. If you don't have any wireframes to go off of, or even if you do, a client can change their mind once they see the site in action. The approach this tutorial is going to take is to concentrate up front on the functionality of the site, then there will be a section later that will focus on customizing the styles.
 
 The `application/header.hbs` file contains the header for our site, and is where we will place the menu bar. Replace the code that is there with this code:
 
@@ -186,7 +186,7 @@ The html that gives us our menu bar is the section of the code that is:
 
 (If you currently aren't running `grunt serve`, then please run it now)
 
-You will notice that as you click on the menu options that the url changes at the top, but the 'active' state of the menu option doesn't change. This is because the href has been setup but we aren't handling the route changes yet. 
+You will notice that as you click on the menu bar options that the url changes at the top, but the 'active' state of the menu bar option doesn't change. This is because the href has been setup but we aren't handling the route changes yet. 
 
 There are a few files we'll need to change to get the functionality working, so first open up the `app/scripts/routers/application.js` file. In it you will see we only have one route defined which is our default route
 `...`
@@ -230,7 +230,7 @@ Now let's add the other methods we need to handle our routes that we added. Afte
 
 Now the last piece we need to add to get our functionality working is within the view. Views can handle events triggered from the DOM as well as setting values within the DOM. Views are placed into the page by the controllers. In the case of the header view, it is a little unique in that it is being placed by the base controller. This is because we want our header and footer displayed as part of every route we hit. If the relationship between views and controllers isn't clear yet, don't worry, we will go over some simpler examples later. 
 
-The view that we will be working with to handle the clicking of our menu is found at `app/scripts/views/application/header.js`. The line within this file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
+The view that we will be working with to handle the clicking of our menu bar is found at `app/scripts/views/application/header.js`. The line within this file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
 
 <pre>
   ui: {
@@ -307,7 +307,7 @@ Then in the defaultRoute function, place this line under the `Backbone.history.n
 
     Application.app.content.show(new HomeView());
 
-Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route.
+Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route.
 
 ## Menu page
 

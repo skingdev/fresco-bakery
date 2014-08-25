@@ -17,5 +17,10 @@ module.exports = {
       dest: '<%= folders.output %>',
       src: '**'
     }]
+  },
+
+  data: {
+    src: 'data/menu.json',
+    dest: '<%= folders.output %>' + '/'
   }
 };

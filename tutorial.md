@@ -272,3 +272,323 @@ The ui hash is Marionette's way of allowing us to reference items in the templat
 The initialize method is executed when the view loads. We are listening to `'all'` events on the `Application.app.history` object. When the `Application.app.history` object is updated, the updateNavigation method in this view will execute. You'll see that there is an onClose method and in it we are calling a method to stopListening to the previous listener we set up. By default, whenever a (Marionette) view is closed, it will automatically stop and clean up all listeners. In this case, we are calling it onClose of the view to be explicit.
 
 The updateNavigation method is called when the `Application.app.history` object is updated. It utilizes our ui element that we defined above to find any li elements in our template (each li element is a menu option in the template). It then removes the 'active' class which is what gives the menu option the selected look. It then calls the routeMatches method to check to see if the route we are going to matches the history object. If it does then we know which menu option the user clicked on. If the route matches, then we add the class 'active' to that menu option which will give it the selected look. 
+
+## Main page (Home Page)
+
+Let's revisit our customer's requirements for the home page:
+
+- Brief history of the bakery
+- Phone number to contact the bakery
+- Hours of operation
+
+Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called 'layout.hbs' with this content in it:
+
+    <div class="container">
+      <p>
+      Fresco Bakery was created in 1970 by Mario Fresco. We still use the same recipes today that he used when the bakery was established. We offer a large variety of bakery items including breads, rolls, pastas, muffins, cookies and cakes. For a full listing of all of the items we offer, please check out our <a href="#/menu">Menu</a> page.
+      </p>
+    </div>
+
+Our template won't render without a view being associated with it, so let's create a 'home' folder in the `app/scripts/views` directory and put in it a file called `layout.js`. Within this file, place the following code:
+
+<pre>
+  'use strict';
+
+  module.exports = Backbone.Marionette.ItemView.extend({
+    template: 'home/layout'
+  });
+</pre>
+
+This will tell the view what template to render. There is one more thing we need to do to get the data to render on the page. Within our `app/scripts/controllers/application.js` file, we need to tell the application to render this view when our default route is called. We will need to include a reference to our view, so put this line under the BaseController require statement:
+
+    var HomeView = require('../views/home/layout');
+
+Then in the defaultRoute function, place this line under the `Backbone.history.navigate` call:
+
+    Application.app.content.show(new HomeView());
+
+Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route.
+
+## Menu page
+
+For our menu page, the customer asked that for now we just list each item's  name, quantity and cost. Later we will add pictures of each of these items. In this topic, we are going to be covering Backbone's Collections and Models, as well as Marionette's Composite and Item views, which are common for displaying lists of information. 
+
+### Menu page - data/Collection/Model
+
+We will read the information for the menu items from a data file that is in a json format. 
+
+Create a folder in the root of the project called `data`. Within that folder, create a file called `menu.json` with the following content in it:
+
+<pre>
+[
+    {
+        "name": "rolls",
+        "quantity": "1",
+        "cost": ".25"
+    },
+    {
+        "name": "rolls",
+        "quantity": "12",
+        "cost": "2.50"
+    },
+    {
+        "name": "sub buns",
+        "quantity": "1",
+        "cost": ".30"
+    },
+    {
+        "name": "sub buns",
+        "quantity": "12",
+        "cost": "3.00"
+    }
+]
+</pre>
+
+We will need to have this file copied to our output directory so that our application will be able to read from it. This will require us to modify the grunt "copy" task. The copy task is responsible for copying files when we build our project. Within the `tasks/config` folder, open up the `copy.js` file. It will look like this:
+
+<pre>
+'use strict';
+
+module.exports = {
+  bootstrapFonts: {
+    files: [{
+      expand: true,
+      cwd: '<%= folders.bower %>/bootstrap',
+      dest: '<%= folders.output %>',
+      src: 'fonts/**'
+    }]
+  },
+
+  static: {
+    files: [{
+      expand: true,
+      cwd: '<%= folders.static %>',
+      dest: '<%= folders.output %>',
+      src: '**'
+    }]
+  }
+};
+</pre>
+
+What we are seeing here are two copy tasks called "bootstrapFonts" and "static". The "bootstrapFonts" task copies all of bootstrap's fonts into our output directory, and the "static" task copies all of our images to our output directory. The output directory is where all of our files are served out of as we are doing development, so if you have already run `grunt serve`, you can look in the output directory, which is the `.dev` folder, and see "fonts" and "images" folders. What we want to do is add our data folder to the `.dev` folder as well. In the `copy.js` file you have open, add the following as another task after "static":
+
+<pre>
+  data: {
+    src: 'data/menu.json',
+    dest: '<%= folders.output %>' + '/'
+  }
+</pre>
+
+So the file should look like this:
+
+<pre>
+'use strict';
+
+module.exports = {
+  bootstrapFonts: {
+    files: [{
+      expand: true,
+      cwd: '<%= folders.bower %>/bootstrap',
+      dest: '<%= folders.output %>',
+      src: 'fonts/**'
+    }]
+  },
+
+  static: {
+    files: [{
+      expand: true,
+      cwd: '<%= folders.static %>',
+      dest: '<%= folders.output %>',
+      src: '**'
+    }]
+  },
+
+  data: {
+    src: 'data/menu.json',
+    dest: '<%= folders.output %>' + '/'
+  }
+};
+</pre>
+
+A Backbone Collection is what is going to obtain our data from the `menu.json` file, and store it so we can use it in our view. The first thing we need to do is create a directory called "collections" in our `app/scripts` directory. In that directoy, create a file called `menu-items.js` with the following code in it:
+
+<pre>
+'use strict';
+
+module.exports = Backbone.Collection.extend({
+  url: function() {
+    return 'data/menu.json';
+  }
+});
+</pre>
+
+This is how we will define a Backbone Collection. The "url" property specifies the location of the data. This can be something like an API endpoint, or as in this case, a file that contains data in a json format. When you call `fetch` on the collection, Backbone uses the url property to determine where to get the data from. 
+
+In this particular instance, we don't need to define a model for each menu item, because Backbone does this for us automatically. I prefer explicit code over implicit code though, because it makes it easier for someone not familiar with your application to trace through what is happening, and provides for some consistency. That being said, let's create a menu item model. Create a directory called "models" in our `app/scripts` directory. In that directory, create a file called `menu-item.js` with the following code in it:
+
+<pre>
+'use strict';
+
+module.exports = Backbone.Model.extend({
+});
+</pre>
+
+This is a good point to take note of the naming standards of our collections and models. Since a model is a single item, we make sure the names are singular (i.e. menu-item.js, user.js, car.js, etc.). For collections, since they are plural, we make sure we use plural endings for them (i.e. menu-items.js, users.js, cars.js, etc.).
+
+### Menu page - Views/Templates
+
+The menu page is going to be layed out in the following way:
+
+- Layout view/template: The main container for the menu page. This will house our title, and a placeholder (container) for the list of menu items
+- Items view/template: Will contain the headers for the columns, and a placeholder (container) for each row
+- Item view/template: Responsible for displaying each menu item 
+
+Let's start by creating a "menu" directory in our `app/templates` directory. In there, let's create our `layout.hbs` file with the following content:
+
+    <h1>Menu</h1>
+
+    <div data-view="menu-items"></div>
+
+
+
+In here, we have our header "Menu", and then a placeholder for the menu items. The convention we are using here is when you have a placeholder that is being used for a view, we will give it a property of "data-view" and set it equal to the name of the view. (There is no automatic mapping based on name here, so we could've set it to data-view="generic-thing", but for ease of tracing the code and consistency, we will name it that same name as the view) 
+
+Since we have our layout template, let's create its view. In the `app/scripts/views/menu` directory, create a `layout.js` file with the following content in it:
+
+<pre>
+'use strict';
+
+module.exports = Backbone.Marionette.LayoutView.extend({
+  template: 'menu/layout',
+
+  regions: {
+    menuItems: '[data-view=menu-items]'
+  }
+});
+
+</pre>
+
+We create our layout view by utilizing Marionette's LayoutView. The template property tells the application where it can find the handlebars file we created in the last step. You will also notice there is a menuItems region. This gives us a hook to the placeholder on the template that we will be able to use in our controller, but we will cover that in a little bit. 
+
+The next thing we are going to create is the Items view/template. In the `app/templates/menu` directory, create an `items.hbs` file with the following code in it:
+
+    <div class="row">
+      <div class="col-sm-3">
+        <h4>Name</h4>
+      </div>
+
+      <div class="col-sm-3">
+        <h4>Quantity</h4>
+      </div>
+
+      <div class="col-sm-3">
+        <h4>Cost (per Quantity)</h4>
+      </div>
+    </div>
+
+    <div data-view-container></div>
+
+The first div (that has a class of "row") is the section that contains the headers for our three columns (Name, Quantity, and Cost). The class of "row" is used to create a horizontal group of columns. For each of the column headers, the class of "col-sm-3" is used to space out the columns. Bootstrap uses a 12 column layout, so these three columns will use up 3/4 of the screen. We will cover more styling later, but for now if you want to read up on the grid system that Bootstrap uses, please click [here](http://getbootstrap.com/css/#grid).
+
+The second div is a placeholder for our individual menu items. The naming convention we will use for this is "data-view-container" since it will be containing the view's data (this will be more apparent when we create the view). Let's create the view for the Items by creating a file called `items.js` in the `app/scripts/views/menu` directory. Put the following code in that file:
+
+<pre>
+'use strict';
+
+var ItemView = require('./item');
+
+module.exports = Backbone.Marionette.CompositeView.extend({
+  template: 'menu/items',
+  childView: ItemView,
+  childViewContainer: '[data-view-container]'
+});
+</pre>
+
+This introduces us to Marionette's CompositeView. There are two views that are similar within Marionette, the CollectionView and the CompositeView. The CollectionView is used to render lists of information without additional functionality needed for each row or any additional HTML wrapper. The CompositeView is useful if you wrap a template around a collection, for example, a list with a header and a footer. CompositeViews are also helpful if you are going to be providing additional functionality around each row.
+
+Within the CompositeView, we specify the following:
+
+- template: The template that is going to be rendered
+- childView: The view that is responsible for each item in the collection
+- childViewContainer: The placeholder on our template where the childView is going to be placed.
+
+The childView in this case is brought in via the required statement at the top of the file. Let's create that view right now. In the `app/scripts/views/menu` directory, create a file called `item.js` with the following code in it:
+
+<pre>
+'use strict';
+
+module.exports = Backbone.Marionette.ItemView.extend({
+  template: 'menu/item'
+});
+</pre>
+
+This is utilizing Marionette's ItemView. We indicate in the template property which template this view will render. Now in the `app/templates/menu` directory, create a file called `item.hbs` with the following content in it:
+
+    <div class="row">
+      <div class="col-sm-3">
+        {{name}}
+      </div>
+
+      <div class="col-sm-3">
+        {{quantity}}
+      </div>
+
+      <div class="col-sm-3">
+        {{cost}}
+      </div>
+    </div>
+
+The main div has a class of "row" to create a horizontal group of columns, and each column has the class of "col-sm-3" just like our headers did above. The handlebars placeholders {{name}} etc. match up with the names of the attributes within the models. (Each attribute name for the menu item model defaults from what they were set as in the json file.)
+
+The last piece we need to get this all wired up is the controller. Within the `app/scripts/controllers/application.js` file, We will need to add these require statements to the top of the file after the line that is `var HomeView = require('../views/home/layout');`
+
+<pre>
+var MenuItemsCollection = require('../collections/menu-items');
+var MenuItemsView = require('../views/menu/items');
+var MenuView = require('../views/menu/layout');
+</pre>
+
+Then we need to modify the menu function so that it looks like this:
+
+<pre>
+...
+  menu: function() {
+    Backbone.history.navigate('#/menu');
+
+    var layout = new MenuView();
+    Application.app.content.show(layout);
+
+    var menuItems = new MenuItemsCollection();
+    menuItems.fetch().done(function() {
+
+      layout.menuItems.show(new MenuItemsView({
+        collection: menuItems
+      }));
+    });
+  },
+...
+
+</pre>
+
+We still navigate to the menu route as we did before (Backbone.history.navigate('#/menu'); ). We create an instance of the menu layout view and show it in the Application's main content area. Then we create an instance of the MenuItemsCollection and perform a fetch on it. 
+
+There is some detailed explaining we need to do with these lines:
+
+      layout.menuItems.show(new MenuItemsView({
+        collection: menuItems
+      }));
+
+If you remember, back in our menu's layout view (`app/scripts/views/menu/layout.js`), we had these lines:
+
+    regions: {
+      menuItems: '[data-view=menu-items]'
+    }
+
+So what the code `layout.menuItems.show` is doing is referencing the `menuItems` property on the layout view, and showing a new instance of the MenuItemsView in it. When this instance of the MenuItemsView is created, it is passed a property of `collection` that is set to what is returned from the json file in the `menuItems` variable. `collection` is a property on Marionette's CompositeView. 
+
+Now if you run the `grunt serve` command, you should be able to click on the Menu and see the data from the json file.
+
+
+
+
+

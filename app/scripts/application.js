@@ -12,7 +12,7 @@ var application = new Backbone.Marionette.Application({
   routers: []
 });
 
-application.on('initialize:after', function() {
+application.on('start', function() {
   this.history.start({
     hashChange: true,
     pushState: false

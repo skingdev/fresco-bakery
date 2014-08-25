@@ -11,7 +11,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.listenTo(Application.app.history, 'all', this.updateNavigation);
   },
 
-  onClose: function() {
+  onDestroy: function() {
     this.stopListening(Application.app.history);
   },
 

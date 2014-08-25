@@ -4,7 +4,7 @@
 
 This tutorial covers the basics of creating a static website for a 
 fictitious bakery. The components that we will be using are covered in
-the "components" section. 
+the "components" section. There is a branch called "finished-app" that contains the code that matches up with the finsihed tutorial.
 
 ## Let's get this out of the way
 

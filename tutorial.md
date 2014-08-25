@@ -278,8 +278,6 @@ The updateNavigation method is called when the `Application.app.history` object 
 Let's revisit our customer's requirements for the home page:
 
 - Brief history of the bakery
-- Phone number to contact the bakery
-- Hours of operation
 
 Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called 'layout.hbs' with this content in it:
 
@@ -587,3 +585,73 @@ If you remember, back in our menu's layout view (`app/scripts/views/menu/layout.
 So what the code `layout.menuItems.show` is doing is referencing the `menuItems` property on the layout view, and showing a new instance of the MenuItemsView in it. When this instance of the MenuItemsView is created, it is passed a property of `collection` that is set to what is returned from the json file in the `menuItems` variable. `collection` is a property on Marionette's CompositeView. 
 
 Now if you run the `grunt serve` command, you should be able to click on the Menu and see the data from the json file.
+
+## Directions page
+
+The directions page is going to be pretty static. The customer has requested that we offer text directions from the south, east and west, as well as an imbedded google map. (The address used for this example is just an arbitrary/generic address in the Little Italy section of Cleveland, Ohio.)
+
+First let's create our template, so in the `app/templates` directory, let's create a directory called `directions` and a file within there called `layout.hbs` with the following content in it:
+
+    <h1>Directions</h1>
+
+    <div class="row">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2987.8100475723472!2d-81.59813599999998!3d41.50839099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8830fc7400395c95%3A0xd86a1ac754067ba2!2s12110+Mayfield+Rd%2C+Cleveland%2C+OH+44106!5e0!3m2!1sen!2sus!4v1408996575401" width="600" height="450" frameborder="0" style="border:0"></iframe>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <h4>From the South</h4>
+
+        <h6>Take 77 North to 90 East</h6>
+        <h6>Take Exit 173B for Chester Ave</h6>
+        <h6>Take a right onto Chester Ave</h6>
+        <h6>After about 3 miles, turn left onto Euclid Ave</h6>
+        <h6>After .5 mile, turn right onto Mayfield Rd</h6>
+      </div>
+
+      <div class="col-sm-4">
+        <h4>From the West</h4>
+
+        <h6>Take 90 East</h6>
+        <h6>Take Exit 173B for Chester Ave</h6>
+        <h6>Take a right onto Chester Ave</h6>
+        <h6>After about 3 miles, turn left onto Euclid Ave</h6>
+        <h6>After .5 mile, turn right onto Mayfield Rd</h6>
+      </div>
+
+      <div class="col-sm-4">
+        <h4>From the East</h4>
+
+        <h6>Take 90 West</h6>
+        <h6>Take Exit 177 for Martin Luther King Junior Drive</h6>
+        <h6>After about 2.5 miles, at the traffic circle, take the 3rd exit onto East Blvd</h6>
+        <h6>Take a slight left onto Ford Dr</h6>
+        <h6>Continue onto Mayfield Rd</h6>
+      </div>
+    </div>
+
+
+Let's create the view that will render our template. In the `app/scripts/views` directory, create a folder called `directions` and in there a file called `layout.js` with the following code in it:
+
+<pre>
+'use strict';
+
+module.exports = Backbone.Marionette.ItemView.extend({
+  template: 'directions/layout'
+});
+</pre>
+
+Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add `var DirectionsView = require('../views/directions/layout');`. Modify the directions function so it looks like this:
+
+<pre>
+  directions: function() {
+    Backbone.history.navigate('#/directions');
+
+    var layout = new DirectionsView();
+    Application.app.content.show(layout);
+  },
+</pre>
+
+With this code, we create an instance of the DirectionsView and add it to the main application's content area.
+
+Run `grunt serve` and click on the Directions link in the menu bar to view the changes we've made so far.

@@ -16,7 +16,7 @@ as global packages:
     npm install -g grunt-cli
     npm install -g bower
 
-Finally, install dependencies with the following commands (from the root of fresco):
+Finally, install dependencies with the following commands (from the root of fresco-bakery):
 
     npm install
     bower install

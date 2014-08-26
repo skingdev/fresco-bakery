@@ -2,13 +2,12 @@
 
 ## Tutorial
 
-After you've completed the steps below for the installation, if you want, take a look at the [tutorial](tutorial.md) for a walkthrough and explanation of creating a sample web site based on this source code. There is a branch called "finished-app" that contains the code that matches up with the finsihed tutorial.
+After you've completed the steps below for the installation, if you want, take a look at the [tutorial](tutorial.md) for a walkthrough and explanation of creating a sample web site based on this source code. There is a branch called "finished-app" that contains the code that matches up with the finished tutorial.
 
 ## Installation
 
 After pulling the project from Github, you will need to setup your local
-environment to work with Node, Bower, and Grunt. Depending on your system,
-install [Node](http://nodejs.org/).
+environment to work with Node, Bower, and Grunt. If you don't already have it installed, please install [Node](http://nodejs.org/) now.
 
 After Node is installed, install Bower and Grunt. These should be installed
 as global packages:

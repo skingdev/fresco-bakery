@@ -65,7 +65,7 @@ This tutorial uses the following technologies (there are some more that we will 
 
 `app/templates`: All of the handlebars files that are used for our application
 
-`tasks`: The root contains our configuration for our grunt tasks
+`tasks`: The root contains the configuration for our custom grunt tasks
 
 `tasks/config`: Contains configuration for grunt tasks brought in through npm (the package.json file)
 
@@ -81,7 +81,7 @@ This tutorial uses the following technologies (there are some more that we will 
 
 ## Let's get going
 
-OK, now that you have the project cloned locally and have run through the setup in the README.md file, let's bring up the application by running the following command from the root of the project:
+OK, now that you have the project cloned locally and have run through the setup in the [README.md](README.md) file, let's bring up the application by running the following command from the root of the project:
 
 `grunt serve`
 
@@ -123,7 +123,7 @@ File ".dev/fresco-0.0.0.js" created.
 Running "uglify:development" (uglify) task
 
 Running "less:development" (less) task
-File .dev/fresco-0.0.0.css created: 0 B → 122.05 kB
+File .dev/fresco-0.0.0.css created: 0 B ? 122.05 kB
 
 Running "html:development" (html) task
 Reading app/pages/index.html.template file...
@@ -150,6 +150,8 @@ Once you see the "Waiting...", you will know that the web server is up and runni
 If the website doesn't come up, bring up the development tools in Chrome or Firefox (or IE if you absolutely have to, as a last resort, and don't have access to the internet to download Chrome or Firefox).
 
 In the console screen within the development tools, you can view errors, etc.  We will eventually try to address the most common errors within this post, but until then, a great source for debugging any errors is [stackoverflow](http://stackoverflow.com/).
+
+__Note:__ Another thing to note as you are going through this tutorial is that as we are adding files, you may not notice the changes taking effect in the browser. If this happens, just stop the `grunt serve` from running (usually something similar to Ctrl-c), and then start it back up again.
 
 ## Application requirements
 
@@ -238,7 +240,7 @@ Backbone.history.navigate(Application.config.defaultRoute);
 
 `Backbone.history.navigate` allows you to redirect to a route and add the new url to the browser's history so you can click Back in the browser. The `Application.config.defaultRoute` will read from the `app/scripts/config.js` file and return the value that is specified in `defaultRoute`.
 
-Now let's add the other methods we need to handle our routes that we added. After the `defaultRoute method, add these lines:
+Now let's add the other methods we need to handle our routes that we added. After the `defaultRoute` method, add these lines (be sure to put a comma after the ending brace of the defaultRoute function):
 
 ```javascript
 directions: function() {
@@ -295,7 +297,11 @@ Now let's break down what each of these sections mean:
 
 The `ui` hash is Marionette's way of allowing us to reference items in the template. The left part of the expression is a name we want to use to reference the element on the right side of the expression. The right side is a css selector to the element in the DOM managed by the view. 
 
-The `initialize` method is executed when the view loads. We are listening to `'all'` events on the `Application.app.history` object. When the `Application.app.history` object is updated, the `updateNavigation` method in this view will execute. You'll see that there is an `onClose` method and in it we are calling a method to `stopListening` to the previous listener we set up. By default, whenever a (Marionette) view is closed, it will automatically stop and clean up all listeners. In this case, we are calling it `onClose` of the view to be explicit.
+The `initialize` method is executed when the view loads. We are listening to `'all'` events on the `Application.app.history` object. When the `Application.app.history` object is updated, the `updateNavigation` method in this view will execute. 
+
+In the `onClose` method, we are calling a method to `stopListening` to the previous listener we set up. By default, whenever a (Marionette) view is closed, it will automatically stop and clean up all listeners. In this case, we are calling it `onClose` of the view to be explicit.
+
+(We'll go over the routeMatches method in a moment)
 
 The `updateNavigation` method is called when the `Application.app.history` object is updated. It utilizes our `ui` element that we defined above to find any `<li>` elements in our template (each `<li>` element is a menu option in the template). It then removes the 'active' class which is what gives the menu option the selected look. It then calls the `routeMatches` method to check to see if the route we are going to matches the history object. If it does then we know which menu option the user clicked on. If the route matches, then we add the class 'active' to that menu option which will give it the selected look. 
 
@@ -378,7 +384,7 @@ Create a folder in the root of the project called `data`. Within that folder, cr
 ]
 ```
 
-We will need to have this file copied to our output directory so that our application will be able to read from it. This will require us to modify the grunt "copy" task. The copy task is responsible for copying files when we build our project. Within the `tasks/config` folder, open up the `copy.js` file. It will look like this:
+We will need to have this file copied to our output directory (which we'll cover in a second) so that our application will be able to read from it. This will require us to modify the grunt "copy" task. The copy task is responsible for copying files when we build our project. Within the `tasks/config` folder, open up the `copy.js` file. It will look like this:
 
 ```javascript
 'use strict';
@@ -493,7 +499,7 @@ Let's start by creating a "menu" directory in our `app/templates` directory. In 
 
 In here, we have our header "Menu", and then a placeholder for the menu items. The convention we are using here is when you have a placeholder that is being used for a view, we will give it a property of `data-view` and set it equal to the name of the view. (There is no automatic mapping based on name here, so we could've set it to `data-view="generic-thing"`, but for ease of tracing the code and consistency, we will name it the same name as the view)
 
-Since we have our layout template, let's create its view. In the `app/scripts/views/menu` directory, create a `layout.js` file with the following content in it:
+Since we have our layout template, let's create its view. Create a "menu" directory in the `app/views` directory and then within there, create a `layout.js` file with the following content in it:
 
 ```javascript
 'use strict';

@@ -171,6 +171,8 @@ Our "customer" has given us the following requirements:
 
 So now that we have our requirements, let's start tackling them. The site will be structured with the menu at the top (right under our header), and as the user clicks on the menu options, we will just change the content that is being displayed in the area that is between the menu bar but above the footer. This area from now on will be referred to as the __main content area__. 
 
+![Adding the Menu Bar](/tutorial/AddingMenuBar.jpg?raw=true "Adding Menu Bar")
+
 ## Menu bar
 
 Let's put the menu bar on. Bootstrap makes it easy for us to get some default styles in. Remember when doing web development that styles, colors, etc. can be easily modified at any time. If you don't have any wireframes to go off of, or even if you do, a client can change their mind once they see the site in action. The approach this tutorial is going to take is to concentrate up front on the functionality of the site, then there will be a section later that will focus on customizing the styles.
@@ -312,6 +314,8 @@ The `updateNavigation` method is called when the `Application.app.history` objec
 Let's revisit our customer's requirements for the home page:
 
 - Brief history of the bakery
+- Phone number to contact the bakery (this will be done later)
+- Hours of operation (this will be done later)
 
 Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called 'layout.hbs' with this content in it:
 

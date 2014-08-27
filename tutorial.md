@@ -650,6 +650,8 @@ So what the code `layout.menuItems.show` is doing is referencing the `menuItems`
 
 Now if you stop any running grunt processes and run the `grunt serve` command, you should be able to click on the Menu and see the data from the json file.
 
+![Menu page](/tutorial/MenuPage.jpg?raw=true "Menu Page")
+
 ## Directions page
 
 The directions page is going to be pretty static. The customer has requested that we offer text directions from the south, east and west, as well as an embedded google map. (The address used for this example is just an arbitrary/generic address in the Little Italy section of Cleveland, Ohio.)
@@ -706,7 +708,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 });
 ```
 
-Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add `var DirectionsView = require('../views/directions/layout');`. Modify the `directions` function so it looks like this:
+Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add the line:
+
+`var DirectionsView = require('../views/directions/layout');`. 
+
+Modify the `directions` function so it looks like this:
 
 ```javascript
   directions: function() {
@@ -720,3 +726,5 @@ Then in the `app/scripts/controllers/application.js` file, we will need to add a
 With this code, we create an instance of the `DirectionsView` and add it to the main application's content area.
 
 Run `grunt serve` and click on the Directions link in the menu bar to view the changes we've made so far.
+
+![Directions page](/tutorial/DirectionsPage.jpg?raw=true "Directions page")

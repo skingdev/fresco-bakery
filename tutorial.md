@@ -145,7 +145,7 @@ Running "watch" task
 Waiting...
 ```
 
-Once you see the "Waiting...", you will know that the web server is up and running. You will also notice that a window came up by default for Karma. Karma is our automated test runner. We will go over Karma later in this tutorial. For now, just open up another tab and go to [http://localhost:9000](http://localhost:9000). This will bring up our website! 
+Once you see the "Waiting...", you will know that the web server is up and running. You will also notice that a window came up by default for Karma. Karma is our automated test runner. We will go over Karma later in this tutorial. For now, just open up another tab and go to [http://localhost:9000](http://localhost:9000). This will bring up our website! (If you don't see the three colored flag in the header, it may be hidden due to your screen resolution or browser size. This will be covered more when we go over the styles for the site.)
 
 ![Initial application](/tutorial/InitialApp.jpg?raw=true "Initial Application")
 

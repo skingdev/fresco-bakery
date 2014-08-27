@@ -10,7 +10,7 @@
     - [Folders](#user-content-folders)
 - [Let's get going](#user-content-lets-get-going)
 - [Application requirements](#user-content-application-requirements)
-- [Menu bar](#user-content-menu-bar)
+- [Navigation bar](#user-content-navigation-bar)
 - [Main page (Home Page)](#user-content-main-page-home-page)
 - [Menu page](#user-content-menu-page)
     - [Menu page - data/Collection/Model](#user-content-menu-page---datacollectionmodel)
@@ -21,11 +21,11 @@
 
 This tutorial covers the basics of creating a static website for a 
 fictitious bakery. The components that we will be using are covered in
-the "components" section. There is a branch called "finished-app" that contains the code that matches up with the finsihed tutorial.
+the "components" section. There is a branch called "finished-app" that contains the code that matches up with the finished tutorial.
 
 ## Let's get this out of the way
 
-There are many different technologies to use when creating a javascript single page application. This tutorial is not meant to become a forum for the discussion of the different technologies, but rather a source of information to those who are new to javascript web development.
+There are many different technologies to use when creating a JavaScript single page application. This tutorial is not meant to become a forum for the discussion of the different technologies, but rather a source of information to those who are new to JavaScript web development.
 
 ## Before you start the tutorial
 
@@ -35,15 +35,15 @@ The tutorial uses a project on [GitHub](git@github.com:skingdev/fresco-bakery.gi
 
 This tutorial uses the following technologies (there are some more that we will cover later on, but these are the main ones to get familiar with):
 
-[Backbone.js](http://backbonejs.org/): A javascript MVC framework that gives structure to your web application. 
+[Backbone.js](http://backbonejs.org/): A JavaScript MVC framework that gives structure to your web application. 
 
 [Marionette](http://marionettejs.com/): An application library that sits on top of Backbone.js that provides methods of simplifying the development of your application.
 
-[npm](https://www.npmjs.org/): npm stands for Node Package Manager. npm uses the "package.json" to install and maintain node packages that this application will use.
+[npm](https://www.npmjs.org/): stands for Node Package Manager. npm uses the "package.json" file in the root of the project to install and maintain node packages that this application will use.
 
-[bower](https://www.npmjs.org/): A package manager for front-end packages. bower utilizes the "bower.json" file to install and maintain the packages that this application will use.
+[bower](https://www.npmjs.org/): A package manager for front-end packages. bower utilizes the "bower.json" file in the root of the project to install and maintain the bower components that this application will use.
 
-[grunt](http://gruntjs.com/): A task runner that we will use for this application. Grunt will take care of compiling our javascript files and assets, copying files, renaming files, running a server so we can test our application, running tests for our application, etc.  The main file for grunt is "Gruntfile.js", but grunt will also use the javascript files that are in our projects "tasks" folder.
+[grunt](http://gruntjs.com/): A task runner that we will use for this application. Grunt will take care of compiling our JavaScript files and assets, copying files, renaming files, running a server so we can test our application, running tests for our application, etc.  The main file for grunt is "Gruntfile.js", but grunt will also use the JavaScript files that are in our project's "tasks" folder.
 
 [Bootstrap](http://getbootstrap.com/): A front-end framework that contains well documented styles and examples for creating responsive web applications.
 
@@ -57,7 +57,7 @@ This tutorial uses the following technologies (there are some more that we will 
 
 `app/pages`: The main template file for our application. You can have multiple files in here, but for this application, we will have only the one. **This is the main entry point for the application**
 
-`app/scripts`: All of the javascript code
+`app/scripts`: All of the JavaScript code
 
 `app/static`: Where the images are stored
 
@@ -78,6 +78,8 @@ This tutorial uses the following technologies (there are some more that we will 
 `test/templates`: Contains the html file for mocha that you can go to once the application is up and running [http://localhost:9001/test.html](http://localhost:9001/test.html)
 
 `test/unit`: Contains unit tests
+
+`tutorial`: Contains the images that this tutorial document uses
 
 ## Let's get going
 
@@ -145,7 +147,7 @@ Running "watch" task
 Waiting...
 ```
 
-Once you see the "Waiting...", you will know that the web server is up and running. You will also notice that a window came up by default for Karma. Karma is our automated test runner. We will go over Karma later in this tutorial. For now, just open up another tab and go to [http://localhost:9000](http://localhost:9000). This will bring up our website! (If you don't see the three colored flag in the header, it may be hidden due to your screen resolution or browser size. This will be covered more when we go over the styles for the site.)
+Once you see the "Waiting...", you will know that the web server is up and running. You may also notice that a window came up by default for Karma. Karma is our automated test runner. We will go over Karma later in this tutorial. For now, just open up your preferred web browser and go to [http://localhost:9000](http://localhost:9000). This will bring up our website! (If you don't see the three colored flag in the header, it may be hidden due to your screen resolution or browser size. This will be covered more when we go over the styles for the site.)
 
 ![Initial application](/tutorial/InitialApp.jpg?raw=true "Initial Application")
 
@@ -153,7 +155,7 @@ If the website doesn't come up, bring up the development tools in Chrome or Fire
 
 In the console screen within the development tools, you can view errors, etc.  We will eventually try to address the most common errors within this post, but until then, a great source for debugging any errors is [stackoverflow](http://stackoverflow.com/).
 
-__Note:__ Another thing to note as you are going through this tutorial is that as we are adding files, you may not notice the changes taking effect in the browser. If this happens, just stop the `grunt serve` from running (usually something similar to Ctrl-c), and then start it back up again.
+__Note:__ As you are going through this tutorial and we are adding files, you may not notice the changes taking effect in the browser. If this happens, just stop the `grunt serve` from running (usually something similar to Ctrl-c), and then start it back up again.
 
 ## Application requirements
 
@@ -163,21 +165,21 @@ Our "customer" has given us the following requirements:
   - Brief history of the bakery
   - Phone number to contact the bakery
   - Hours of operation
-2. There should be the following menu options:
+2. There should be the following navigation bar options:
   - Home (which will take us to the main page described above)
   - Menu (contains a list of the products that the bakery offers, along with pricing)
   - Photos (pictures of some of the products)
   - Directions (basic directions from North, East, etc. as well as an embedded Google map) 
 
-So now that we have our requirements, let's start tackling them. The site will be structured with the menu at the top (right under our header), and as the user clicks on the menu options, we will just change the content that is being displayed in the area that is between the menu bar but above the footer. This area from now on will be referred to as the __main content area__. 
+So now that we have our requirements, let's start tackling them. The site will be structured with the navigation bar at the top (right under our header), and as the user clicks on the navigation options, we will just change the content that is being displayed in the area that is between the navigation bar but above the footer. This area from now on will be referred to as the __main content area__. 
 
-![Adding the Menu Bar](/tutorial/AddingMenuBar.jpg?raw=true "Adding Menu Bar")
+![Adding the Navigation Bar](/tutorial/AddingNavigationBar.jpg?raw=true "Adding Navigation Bar")
 
-## Menu bar
+## Navigation bar
 
-Let's put the menu bar on. Bootstrap makes it easy for us to get some default styles in. Remember when doing web development that styles, colors, etc. can be easily modified at any time. If you don't have any wireframes to go off of, or even if you do, a client can change their mind once they see the site in action. The approach this tutorial is going to take is to concentrate up front on the functionality of the site, then there will be a section later that will focus on customizing the styles.
+Let's put the navigation bar on. Bootstrap makes it easy for us to get some default styles in. Remember when doing web development that styles, colors, etc. can be easily modified at any time. If you don't have any wireframes to go off of, or even if you do, a client can change their mind once they see the site in action. The approach this tutorial is going to take is to concentrate up front on the functionality of the site, then there will be a section later that will focus on customizing the styles.
 
-The `app/templates/application/header.hbs` file contains the header for our site, and is where we will place the menu bar. Replace the code that is there with this code:
+The `app/templates/application/header.hbs` file contains the header for our site, and is where we will place the navigation bar. Replace the code that is there with this code:
 
 ```html
 <header class="navbar navbar-top navbar-static-top">
@@ -200,7 +202,7 @@ The `app/templates/application/header.hbs` file contains the header for our site
 </header>
 ```
 
-The html that gives us our menu bar is the section of the code that is:
+The html that gives us our navigation bar is the section of the code that is:
 
 ```html
 <ul class="nav nav-pills">
@@ -213,7 +215,7 @@ The html that gives us our menu bar is the section of the code that is:
 
 (If you currently aren't running `grunt serve`, then please run it now)
 
-You will notice that as you click on the menu bar options that the url changes at the top, but the 'active' state of the menu bar option doesn't change. This is because the href has been setup but we aren't handling the route changes yet. 
+You will notice that as you click on the navigation bar options that the url changes at the top, but the 'active' state of the navigation bar option doesn't change. This is because the href has been setup but we aren't handling the route changes yet. 
 
 There are a few files we'll need to change to get the functionality working, so first open up the `app/scripts/routers/application.js` file. In it you will see we only have one route defined which is our default route:
 
@@ -262,7 +264,7 @@ photos: function() {
 
 Now the last piece we need to add to get our functionality working is within the view. Views can handle events triggered from the DOM as well as setting values within the DOM. Views are placed into the page by the controllers. In the case of the header view, it is a little unique in that it is being placed by the base controller. This is because we want our header and footer displayed as part of every route we hit. If the relationship between views and controllers isn't clear yet, don't worry, we will go over some simpler examples later. 
 
-The view that we will be working with to handle the clicking of our menu bar is found at `app/scripts/views/application/header.js`. The line within this file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
+The view that we will be working with to handle the clicking of our navigation bar is found at `app/scripts/views/application/header.js`. The line within this file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
 
 ```javascript
   ui: {
@@ -307,7 +309,7 @@ In the `onClose` method, we are calling a method to `stopListening` to the previ
 
 (We'll go over the routeMatches method in a moment)
 
-The `updateNavigation` method is called when the `Application.app.history` object is updated. It utilizes our `ui` element that we defined above to find any `<li>` elements in our template (each `<li>` element is a menu option in the template). It then removes the 'active' class which is what gives the menu option the selected look. It then calls the `routeMatches` method to check to see if the route we are going to matches the history object. If it does then we know which menu option the user clicked on. If the route matches, then we add the class 'active' to that menu option which will give it the selected look. 
+The `updateNavigation` method is called when the `Application.app.history` object is updated. It utilizes our `ui` element that we defined above to find any `<li>` elements in our template (each `<li>` element is a navigation option in the template). It then removes the 'active' class which is what gives the navigation option the selected look. It then calls the `routeMatches` method to check to see if the route we are going to matches the history object. If it does then we know which navigation option the user clicked on. If the route matches, then we add the class 'active' to that navigation option which will give it the selected look. 
 
 ## Main page (Home Page)
 
@@ -351,7 +353,7 @@ Application.app.content.show(new HomeView());
 
 Finally, you will have to restart the grunt process that is running our webserver. While it will automatically adjust as you edit files, it will not be able to see new template files until you restart. If you had the webpage still open, you may need to refresh it as well.
 
-Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route and the 'active' state of the option in the menu bar will change as well.
+Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different navigation bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route and the 'active' state of the option in the navigation bar will change as well.
 
 ![Home page](/tutorial/HomePage.jpg?raw=true "Home page")
 
@@ -727,6 +729,6 @@ Modify the `directions` function so it looks like this:
 
 With this code, we create an instance of the `DirectionsView` and add it to the main application's content area.
 
-Run `grunt serve` and click on the Directions link in the menu bar to view the changes we've made so far.
+Run `grunt serve` and click on the Directions link in the navigation bar to view the changes we've made so far.
 
 ![Directions page](/tutorial/DirectionsPage.jpg?raw=true "Directions page")

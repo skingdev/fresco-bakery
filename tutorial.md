@@ -317,7 +317,7 @@ Let's revisit our customer's requirements for the home page:
 - Phone number to contact the bakery (this will be done later)
 - Hours of operation (this will be done later)
 
-Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called 'layout.hbs' with this content in it:
+Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called `layout.hbs` with this content in it:
 
 ```html
 <div class="container">

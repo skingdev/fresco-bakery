@@ -495,6 +495,8 @@ The menu page is going to be laid out in the following way:
 - Items view/template: Will contain the headers for the columns, and a placeholder (container) for each row
 - Item view/template: Responsible for displaying each menu item 
 
+![Menu page layout](/tutorial/MenuPageLayout.jpg?raw=true "Menu page layout")
+
 Let's start by creating a "menu" directory in our `app/templates` directory. In there, let's create our `layout.hbs` file with the following content:
 
 ```html

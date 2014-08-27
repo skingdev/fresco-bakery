@@ -1,6 +1,5 @@
 'use strict';
 
-var Application = require('../application');
 var BaseController = require('./base');
 var DirectionsView = require('../views/directions/layout');
 var HomeView = require('../views/home/layout');

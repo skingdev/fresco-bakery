@@ -317,7 +317,7 @@ Let's revisit our customer's requirements for the home page:
 - Phone number to contact the bakery (this will be done later)
 - Hours of operation (this will be done later)
 
-Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called 'layout.hbs' with this content in it:
+Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called `layout.hbs` with this content in it:
 
 ```html
 <div class="container">
@@ -349,11 +349,11 @@ Then in the `defaultRoute` function, place this line under the `Backbone.history
 Application.app.content.show(new HomeView());
 ```
 
-Finally, you will have to restart the grunt process that is running our
-webserver. While it will automatically adjust as you edit files, it will
-not be able to see new template files until you restart.
+Finally, you will have to restart the grunt process that is running our webserver. While it will automatically adjust as you edit files, it will not be able to see new template files until you restart. If you had the webpage still open, you may need to refresh it as well.
 
-Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route.
+Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route and the 'active' state of the option in the menu bar will change as well.
+
+![Home page](/tutorial/HomePage.jpg?raw=true "Home page")
 
 ## Menu page
 
@@ -418,12 +418,12 @@ module.exports = {
 
 What we are seeing here are two copy tasks called "bootstrapFonts" and "static". The "bootstrapFonts" task copies all of bootstrap's fonts into our output directory, and the "static" task copies all of our images to our output directory. The output directory is where all of our files are served out of as we are doing development, so if you have already run `grunt serve`, you can look in the output directory, which is the `.dev` folder, and see "fonts" and "images" folders. What we want to do is add our data folder to the `.dev` folder as well. In the `copy.js` file you have open, add the following as another task after "static":
 
-<pre>
+```javascript
   data: {
     src: 'data/menu.json',
     dest: '<%= folders.output %>' + '/'
   }
-</pre>
+```
 
 So the file should look like this:
 
@@ -494,6 +494,8 @@ The menu page is going to be laid out in the following way:
 - Layout view/template: The main container for the menu page. This will house our title, and a placeholder (container) for the list of menu items
 - Items view/template: Will contain the headers for the columns, and a placeholder (container) for each row
 - Item view/template: Responsible for displaying each menu item 
+
+![Menu page layout](/tutorial/MenuPageLayout.jpg?raw=true "Menu page layout")
 
 Let's start by creating a "menu" directory in our `app/templates` directory. In there, let's create our `layout.hbs` file with the following content:
 
@@ -650,6 +652,8 @@ So what the code `layout.menuItems.show` is doing is referencing the `menuItems`
 
 Now if you stop any running grunt processes and run the `grunt serve` command, you should be able to click on the Menu and see the data from the json file.
 
+![Menu page](/tutorial/MenuPage.jpg?raw=true "Menu Page")
+
 ## Directions page
 
 The directions page is going to be pretty static. The customer has requested that we offer text directions from the south, east and west, as well as an embedded google map. (The address used for this example is just an arbitrary/generic address in the Little Italy section of Cleveland, Ohio.)
@@ -706,7 +710,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 });
 ```
 
-Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add `var DirectionsView = require('../views/directions/layout');`. Modify the `directions` function so it looks like this:
+Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add the line:
+
+`var DirectionsView = require('../views/directions/layout');`. 
+
+Modify the `directions` function so it looks like this:
 
 ```javascript
   directions: function() {
@@ -720,3 +728,5 @@ Then in the `app/scripts/controllers/application.js` file, we will need to add a
 With this code, we create an instance of the `DirectionsView` and add it to the main application's content area.
 
 Run `grunt serve` and click on the Directions link in the menu bar to view the changes we've made so far.
+
+![Directions page](/tutorial/DirectionsPage.jpg?raw=true "Directions page")

@@ -21,7 +21,7 @@
 
 This tutorial covers the basics of creating a static website for a 
 fictitious bakery. The components that we will be using are covered in
-the "components" section. 
+the "components" section. There is a branch called "finished-app" that contains the code that matches up with the finsihed tutorial.
 
 ## Let's get this out of the way
 
@@ -51,7 +51,7 @@ This tutorial uses the following technologies (there are some more that we will 
 
 ### Folders
 
-`app`: 	Contains all of our custom code
+`app`:  Contains all of our custom code
 
 `bower_components`: Contains all of the components installed from bower (the bower.json file)
 
@@ -63,9 +63,9 @@ This tutorial uses the following technologies (there are some more that we will 
 
 `app/styles`: Contains main application style file (app.less) and custom styles and/or overrides for bootstrap components
 
-`app/templates`: All of the handlebars files that are used for out application
+`app/templates`: All of the handlebars files that are used for our application
 
-`tasks`: The root contains our configuration for our grunt tasks
+`tasks`: The root contains the configuration for our custom grunt tasks
 
 `tasks/config`: Contains configuration for grunt tasks brought in through npm (the package.json file)
 
@@ -81,13 +81,13 @@ This tutorial uses the following technologies (there are some more that we will 
 
 ## Let's get going
 
-OK, now that you have the project cloned locally and have run through the setup in the README.md file, let's bring up the application by running the following command from the root of the project:
+OK, now that you have the project cloned locally and have run through the setup in the [README.md](README.md) file, let's bring up the application by running the following command from the root of the project:
 
 `grunt serve`
 
 This should bring up output similar to the following:
 
-<pre>
+```shell
 Running "serve" task
 Your tests will run automatically as files are saved.
 You can also view them in a browser at http://localhost:9001/test.html
@@ -123,7 +123,7 @@ File ".dev/fresco-0.0.0.js" created.
 Running "uglify:development" (uglify) task
 
 Running "less:development" (less) task
-File .dev/fresco-0.0.0.css created: 0 B → 122.05 kB
+File .dev/fresco-0.0.0.css created: 0 B ? 122.05 kB
 
 Running "html:development" (html) task
 Reading app/pages/index.html.template file...
@@ -143,13 +143,17 @@ Running "karma:development" (karma) task
 
 Running "watch" task
 Waiting...
-</pre>
+```
 
-Once you see the "Waiting...", you will know that the web server is up and running. You will also notice that a window came up by default for Karma. Karma is our automated test runner. We will go over Karma later in this tutorial. For now, just open up another tab and go to [http://localhost:9000](http://localhost:9000). This will bring up our website!
+Once you see the "Waiting...", you will know that the web server is up and running. You will also notice that a window came up by default for Karma. Karma is our automated test runner. We will go over Karma later in this tutorial. For now, just open up another tab and go to [http://localhost:9000](http://localhost:9000). This will bring up our website! (If you don't see the three colored flag in the header, it may be hidden due to your screen resolution or browser size. This will be covered more when we go over the styles for the site.)
+
+![Initial application](/tutorial/InitialApp.jpg?raw=true "Initial Application")
 
 If the website doesn't come up, bring up the development tools in Chrome or Firefox (or IE if you absolutely have to, as a last resort, and don't have access to the internet to download Chrome or Firefox).
 
 In the console screen within the development tools, you can view errors, etc.  We will eventually try to address the most common errors within this post, but until then, a great source for debugging any errors is [stackoverflow](http://stackoverflow.com/).
+
+__Note:__ Another thing to note as you are going through this tutorial is that as we are adding files, you may not notice the changes taking effect in the browser. If this happens, just stop the `grunt serve` from running (usually something similar to Ctrl-c), and then start it back up again.
 
 ## Application requirements
 
@@ -159,97 +163,108 @@ Our "customer" has given us the following requirements:
   - Brief history of the bakery
   - Phone number to contact the bakery
   - Hours of operation
-2. There should the following menu options:
+2. There should be the following menu options:
   - Home (which will take us to the main page described above)
   - Menu (contains a list of the products that the bakery offers, along with pricing)
   - Photos (pictures of some of the products)
-  - Directions (basic directions from North, East, etc. as well as an imbedded Google map) 
+  - Directions (basic directions from North, East, etc. as well as an embedded Google map) 
 
 So now that we have our requirements, let's start tackling them. The site will be structured with the menu at the top (right under our header), and as the user clicks on the menu options, we will just change the content that is being displayed in the area that is between the menu bar but above the footer. This area from now on will be referred to as the __main content area__. 
 
-## Menu
+![Adding the Menu Bar](/tutorial/AddingMenuBar.jpg?raw=true "Adding Menu Bar")
 
-Let's put the menu on. Bootstrap makes it easy for us to get some default styles in. Remember when doing web development that styles, colors, etc. can be easily modified at any time. If you don't have any wireframes to go off of, or even if you do, a client can change their mind once they see the site in action. The approach this tutorial is going to take is to concentrate up front on the functionality of the site, then there will be a section later that will focus on customizing the styles.
+## Menu bar
 
-The `application/header.hbs` file contains the header for our site, and is where we will place the menu bar. Replace the code that is there with this code:
+Let's put the menu bar on. Bootstrap makes it easy for us to get some default styles in. Remember when doing web development that styles, colors, etc. can be easily modified at any time. If you don't have any wireframes to go off of, or even if you do, a client can change their mind once they see the site in action. The approach this tutorial is going to take is to concentrate up front on the functionality of the site, then there will be a section later that will focus on customizing the styles.
 
-    <header class="navbar navbar-top navbar-static-top">
-      <div class="container">
-        <div class="row">
-          <div class="navbar-brand col-md-6">Welcome to Fresco Bakery</div>
-          <div class="visible-md visible-lg">
-            <div class="col-md-1 navbar-flag navbar-flag-green"></div>
-            <div class="col-md-1 navbar-flag navbar-flag-white"></div>
-            <div class="col-md-1 navbar-flag navbar-flag-red"></div>
-          </div>
-        </div>
-        <ul class="nav nav-pills">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#/menu">Menu</a></li>
-          <li><a href="#/photos">Photos</a></li>
-          <li><a href="#/directions">Directions</a></li>
-        </ul>
+The `app/templates/application/header.hbs` file contains the header for our site, and is where we will place the menu bar. Replace the code that is there with this code:
+
+```html
+<header class="navbar navbar-top navbar-static-top">
+  <div class="container">
+    <div class="row">
+      <div class="navbar-brand col-md-6">Welcome to Fresco Bakery</div>
+      <div class="visible-md visible-lg">
+        <div class="col-md-1 navbar-flag navbar-flag-green"></div>
+        <div class="col-md-1 navbar-flag navbar-flag-white"></div>
+        <div class="col-md-1 navbar-flag navbar-flag-red"></div>
       </div>
-    </header>
+    </div>
+    <ul class="nav nav-pills">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#/menu">Menu</a></li>
+      <li><a href="#/photos">Photos</a></li>
+      <li><a href="#/directions">Directions</a></li>
+    </ul>
+  </div>
+</header>
+```
 
 The html that gives us our menu bar is the section of the code that is:
 
-        <ul class="nav nav-pills">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#/menu">Menu</a></li>
-          <li><a href="#/photos">Photos</a></li>
-          <li><a href="#/directions">Directions</a></li>
-        </ul>
+```html
+<ul class="nav nav-pills">
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="#/menu">Menu</a></li>
+  <li><a href="#/photos">Photos</a></li>
+  <li><a href="#/directions">Directions</a></li>
+</ul>
+```
 
 (If you currently aren't running `grunt serve`, then please run it now)
 
-You will notice that as you click on the menu options that the url changes at the top, but the 'active' state of the menu option doesn't change. This is because the href has been setup but we aren't handling the route changes yet. 
+You will notice that as you click on the menu bar options that the url changes at the top, but the 'active' state of the menu bar option doesn't change. This is because the href has been setup but we aren't handling the route changes yet. 
 
-There are a few files we'll need to change to get the functionality working, so first open up the `app/scripts/routers/application.js` file. In it you will see we only have one route defined which is our default route
-`...`
-`'': 'defaultRoute'`
-`...`
+There are a few files we'll need to change to get the functionality working, so first open up the `app/scripts/routers/application.js` file. In it you will see we only have one route defined which is our default route:
 
-Go ahead and add our other routes here so that our appRoutes object looks like this:
+```javascript
+appRoutes: {
+  '': 'defaultRoute'
+}
+```
 
-<pre>
-    appRoutes: {
-      '': 'defaultRoute',
-      'menu': 'menu',
-      'photos': 'photos',
-      'directions': 'directions'
-    }
-</pre>
+Go ahead and add our other routes here so that our `appRoutes` object looks like this:
 
-appRoutes is how you define routes with Marionette. This gives us the ability to provide a callback method that exists on the controller instead of within this Router file. 
+```javascript
+appRoutes: {
+  '': 'defaultRoute',
+  'menu': 'menu',
+  'photos': 'photos',
+  'directions': 'directions'
+}
+```
 
-Our controllers match up with the names of our routers files, so in this case we are within the `app/scripts/routers/application.js` router file, so the corresponding controller is located at `app/scripts/controllers/application.js`. If you look in that file, you will see our defaultRoute is already setup. Let's take a second to talk about the code within the defaultRoute method:
+`appRoutes` is how you define routes with Marionette. This gives us the ability to provide a callback method that exists on the controller instead of within this Router file. 
 
-`Backbone.history.navigate(Application.config.defaultRoute);`
+Our controllers match up with the names of our routers files, so in this case we are within the `app/scripts/routers/application.js` router file, so the corresponding controller is located at `app/scripts/controllers/application.js`. If you look in that file, you will see our `defaultRoute` is already setup. Let's take a second to talk about the code within the `defaultRoute` method:
 
-Backbone.history.navigate allows you to redirect to a route and add the item to the browsers history so you can click Back in the browser. The Application.config.defaultRoute will read from the `app/scripts/config.js` file and return the value that is specified in defaultRoute.
+```javascript
+Backbone.history.navigate(Application.config.defaultRoute);
+```
 
-Now let's add the other methods we need to handle our routes that we added. After the defaultRoute method, add these lines:
+`Backbone.history.navigate` allows you to redirect to a route and add the new url to the browser's history so you can click Back in the browser. The `Application.config.defaultRoute` will read from the `app/scripts/config.js` file and return the value that is specified in `defaultRoute`.
 
-<pre>
-  directions: function() {
-    Backbone.history.navigate('#/directions');
-  },
+Now let's add the other methods we need to handle our routes that we added. After the `defaultRoute` method, add these lines (be sure to put a comma after the ending brace of the defaultRoute function):
 
-  menu: function() {
-    Backbone.history.navigate('#/menu');
-  },
+```javascript
+directions: function() {
+  Backbone.history.navigate('#/directions');
+},
 
-  photos: function() {
-    Backbone.history.navigate('#/photos');
-  }
-</pre>
+menu: function() {
+  Backbone.history.navigate('#/menu');
+},
+
+photos: function() {
+  Backbone.history.navigate('#/photos');
+}
+```
 
 Now the last piece we need to add to get our functionality working is within the view. Views can handle events triggered from the DOM as well as setting values within the DOM. Views are placed into the page by the controllers. In the case of the header view, it is a little unique in that it is being placed by the base controller. This is because we want our header and footer displayed as part of every route we hit. If the relationship between views and controllers isn't clear yet, don't worry, we will go over some simpler examples later. 
 
-The view that we will be working with to handle the clicking of our menu is found at `app/scripts/views/application/header.js`. The line within this file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
+The view that we will be working with to handle the clicking of our menu bar is found at `app/scripts/views/application/header.js`. The line within this file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
 
-<pre>
+```javascript
   ui: {
     nav: '.nav-pills'
   },
@@ -280,53 +295,69 @@ The view that we will be working with to handle the clicking of our menu is foun
       this.$el.find('a[href="#"]').parent().addClass('active');
     }
   }
-</pre>
+```
 
 Now let's break down what each of these sections mean:
 
-The ui hash is Marionette's way of allowing us to reference items in the template. The left part of the expression is a name we want to use to reference the element on the right side of the expression. The right side is a css selector to the element in the DOM. 
+The `ui` hash is Marionette's way of allowing us to reference items in the template. The left part of the expression is a name we want to use to reference the element on the right side of the expression. The right side is a css selector to the element in the DOM managed by the view. 
 
-The initialize method is executed when the view loads. We are listening to `'all'` events on the `Application.app.history` object. When the `Application.app.history` object is updated, the updateNavigation method in this view will execute. You'll see that there is an onClose method and in it we are calling a method to stopListening to the previous listener we set up. By default, whenever a (Marionette) view is closed, it will automatically stop and clean up all listeners. In this case, we are calling it onClose of the view to be explicit.
+The `initialize` method is executed when the view loads. We are listening to `'all'` events on the `Application.app.history` object. When the `Application.app.history` object is updated, the `updateNavigation` method in this view will execute. 
 
-The updateNavigation method is called when the `Application.app.history` object is updated. It utilizes our ui element that we defined above to find any li elements in our template (each li element is a menu option in the template). It then removes the 'active' class which is what gives the menu option the selected look. It then calls the routeMatches method to check to see if the route we are going to matches the history object. If it does then we know which menu option the user clicked on. If the route matches, then we add the class 'active' to that menu option which will give it the selected look. 
+In the `onClose` method, we are calling a method to `stopListening` to the previous listener we set up. By default, whenever a (Marionette) view is closed, it will automatically stop and clean up all listeners. In this case, we are calling it `onClose` of the view to be explicit.
+
+(We'll go over the routeMatches method in a moment)
+
+The `updateNavigation` method is called when the `Application.app.history` object is updated. It utilizes our `ui` element that we defined above to find any `<li>` elements in our template (each `<li>` element is a menu option in the template). It then removes the 'active' class which is what gives the menu option the selected look. It then calls the `routeMatches` method to check to see if the route we are going to matches the history object. If it does then we know which menu option the user clicked on. If the route matches, then we add the class 'active' to that menu option which will give it the selected look. 
 
 ## Main page (Home Page)
 
 Let's revisit our customer's requirements for the home page:
 
 - Brief history of the bakery
+- Phone number to contact the bakery (this will be done later)
+- Hours of operation (this will be done later)
 
 Let's create a folder called 'home' in the `app/templates` directory. This will help us keep our templates organized for clarity. Within that folder, create a file called 'layout.hbs' with this content in it:
 
-    <div class="container">
-      <p>
-      Fresco Bakery was created in 1970 by Mario Fresco. We still use the same recipes today that he used when the bakery was established. We offer a large variety of bakery items including breads, rolls, pastas, muffins, cookies and cakes. For a full listing of all of the items we offer, please check out our <a href="#/menu">Menu</a> page.
-      </p>
-    </div>
+```html
+<div class="container">
+  <p>
+  Fresco Bakery was created in 1970 by Mario Fresco. We still use the same recipes today that he used when the bakery was established. We offer a large variety of bakery items including breads, rolls, pastas, muffins, cookies and cakes. For a full listing of all of the items we offer, please check out our <a href="#/menu">Menu</a> page.
+  </p>
+</div>
+```
 
 Our template won't render without a view being associated with it, so let's create a 'home' folder in the `app/scripts/views` directory and put in it a file called `layout.js`. Within this file, place the following code:
 
-<pre>
-  'use strict';
+```javascript
+'use strict';
 
-  module.exports = Backbone.Marionette.ItemView.extend({
-    template: 'home/layout'
-  });
-</pre>
+module.exports = Backbone.Marionette.ItemView.extend({
+  template: 'home/layout'
+});
+```
 
-This will tell the view what template to render. There is one more thing we need to do to get the data to render on the page. Within our `app/scripts/controllers/application.js` file, we need to tell the application to render this view when our default route is called. We will need to include a reference to our view, so put this line under the BaseController require statement:
+This will tell the view what template to render. Within our `app/scripts/controllers/application.js` file, we need to tell the application to render this view when our default route is called. We will need to include a reference to our view, so put this line under the BaseController require statement:
 
-    var HomeView = require('../views/home/layout');
+```javascript
+var HomeView = require('../views/home/layout');
+```
 
-Then in the defaultRoute function, place this line under the `Backbone.history.navigate` call:
+Then in the `defaultRoute` function, place this line under the `Backbone.history.navigate` call:
 
-    Application.app.content.show(new HomeView());
+```javascript
+Application.app.content.show(new HomeView());
+```
 
-Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route.
+Finally, you will have to restart the grunt process that is running our
+webserver. While it will automatically adjust as you edit files, it will
+not be able to see new template files until you restart.
+
+Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route.
 
 ## Menu page
 
-For our menu page, the customer asked that for now we just list each item's  name, quantity and cost. Later we will add pictures of each of these items. In this topic, we are going to be covering Backbone's Collections and Models, as well as Marionette's Composite and Item views, which are common for displaying lists of information. 
+For our menu page, the customer asked that for now we just list each item's name, quantity, and cost. Later we will add pictures of each of these items. In this topic, we are going to be covering Backbone's Collections and Models, as well as Marionette's `CompositeView` and `ItemView`, which are common for displaying lists of information.
 
 ### Menu page - data/Collection/Model
 
@@ -334,7 +365,7 @@ We will read the information for the menu items from a data file that is in a js
 
 Create a folder in the root of the project called `data`. Within that folder, create a file called `menu.json` with the following content in it:
 
-<pre>
+```javascript
 [
     {
         "name": "rolls",
@@ -357,11 +388,11 @@ Create a folder in the root of the project called `data`. Within that folder, cr
         "cost": "3.00"
     }
 ]
-</pre>
+```
 
-We will need to have this file copied to our output directory so that our application will be able to read from it. This will require us to modify the grunt "copy" task. The copy task is responsible for copying files when we build our project. Within the `tasks/config` folder, open up the `copy.js` file. It will look like this:
+We will need to have this file copied to our output directory (which we'll cover in a second) so that our application will be able to read from it. This will require us to modify the grunt "copy" task. The copy task is responsible for copying files when we build our project. Within the `tasks/config` folder, open up the `copy.js` file. It will look like this:
 
-<pre>
+```javascript
 'use strict';
 
 module.exports = {
@@ -383,7 +414,7 @@ module.exports = {
     }]
   }
 };
-</pre>
+```
 
 What we are seeing here are two copy tasks called "bootstrapFonts" and "static". The "bootstrapFonts" task copies all of bootstrap's fonts into our output directory, and the "static" task copies all of our images to our output directory. The output directory is where all of our files are served out of as we are doing development, so if you have already run `grunt serve`, you can look in the output directory, which is the `.dev` folder, and see "fonts" and "images" folders. What we want to do is add our data folder to the `.dev` folder as well. In the `copy.js` file you have open, add the following as another task after "static":
 
@@ -396,7 +427,7 @@ What we are seeing here are two copy tasks called "bootstrapFonts" and "static".
 
 So the file should look like this:
 
-<pre>
+```javascript
 'use strict';
 
 module.exports = {
@@ -423,11 +454,15 @@ module.exports = {
     dest: '<%= folders.output %>' + '/'
   }
 };
-</pre>
+```
+
+Finally, since we altered the main Grunt workflow, you should restart the process so that the `data/` folder is copied to the output folder.
+
+#### Consuming Menu Data
 
 A Backbone Collection is what is going to obtain our data from the `menu.json` file, and store it so we can use it in our view. The first thing we need to do is create a directory called "collections" in our `app/scripts` directory. In that directoy, create a file called `menu-items.js` with the following code in it:
 
-<pre>
+```javascript
 'use strict';
 
 module.exports = Backbone.Collection.extend({
@@ -435,24 +470,26 @@ module.exports = Backbone.Collection.extend({
     return 'data/menu.json';
   }
 });
-</pre>
+```
 
 This is how we will define a Backbone Collection. The "url" property specifies the location of the data. This can be something like an API endpoint, or as in this case, a file that contains data in a json format. When you call `fetch` on the collection, Backbone uses the url property to determine where to get the data from. 
 
-In this particular instance, we don't need to define a model for each menu item, because Backbone does this for us automatically. I prefer explicit code over implicit code though, because it makes it easier for someone not familiar with your application to trace through what is happening, and provides for some consistency. That being said, let's create a menu item model. Create a directory called "models" in our `app/scripts` directory. In that directory, create a file called `menu-item.js` with the following code in it:
+In this particular instance, we don't need to define a model for each menu item, because Backbone does this for us automatically. I prefer explicit code over implicit code though, because it makes it easier for someone not familiar with your application to trace through what is happening, and provides for some consistency. That being said, let's create a menu item model.
 
-<pre>
+Create a directory called "models" in our `app/scripts` directory. In that directory, create a file called `menu-item.js` with the following code in it:
+
+```javascript
 'use strict';
 
 module.exports = Backbone.Model.extend({
 });
-</pre>
+```
 
 This is a good point to take note of the naming standards of our collections and models. Since a model is a single item, we make sure the names are singular (i.e. menu-item.js, user.js, car.js, etc.). For collections, since they are plural, we make sure we use plural endings for them (i.e. menu-items.js, users.js, cars.js, etc.).
 
 ### Menu page - Views/Templates
 
-The menu page is going to be layed out in the following way:
+The menu page is going to be laid out in the following way:
 
 - Layout view/template: The main container for the menu page. This will house our title, and a placeholder (container) for the list of menu items
 - Items view/template: Will contain the headers for the columns, and a placeholder (container) for each row
@@ -460,17 +497,17 @@ The menu page is going to be layed out in the following way:
 
 Let's start by creating a "menu" directory in our `app/templates` directory. In there, let's create our `layout.hbs` file with the following content:
 
-    <h1>Menu</h1>
+```html
+<h1>Menu</h1>
 
-    <div data-view="menu-items"></div>
+<div data-view="menu-items"></div>
+```
 
+In here, we have our header "Menu", and then a placeholder for the menu items. The convention we are using here is when you have a placeholder that is being used for a view, we will give it a property of `data-view` and set it equal to the name of the view. (There is no automatic mapping based on name here, so we could've set it to `data-view="generic-thing"`, but for ease of tracing the code and consistency, we will name it the same name as the view)
 
+Since we have our layout template, let's create its view. Create a "menu" directory in the `app/views` directory and then within there, create a `layout.js` file with the following content in it:
 
-In here, we have our header "Menu", and then a placeholder for the menu items. The convention we are using here is when you have a placeholder that is being used for a view, we will give it a property of "data-view" and set it equal to the name of the view. (There is no automatic mapping based on name here, so we could've set it to data-view="generic-thing", but for ease of tracing the code and consistency, we will name it that same name as the view) 
-
-Since we have our layout template, let's create its view. In the `app/scripts/views/menu` directory, create a `layout.js` file with the following content in it:
-
-<pre>
+```javascript
 'use strict';
 
 module.exports = Backbone.Marionette.LayoutView.extend({
@@ -480,34 +517,37 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     menuItems: '[data-view=menu-items]'
   }
 });
+```
 
-</pre>
+We create our layout view by utilizing Marionette's `LayoutView`. The template property tells the application where it can find the handlebars file we created in the last step. You will also notice there is a `menuItems` region. This gives us a hook to the placeholder on the template that we will be able to use in our controller, but we will cover that in a little bit. 
 
-We create our layout view by utilizing Marionette's LayoutView. The template property tells the application where it can find the handlebars file we created in the last step. You will also notice there is a menuItems region. This gives us a hook to the placeholder on the template that we will be able to use in our controller, but we will cover that in a little bit. 
+#### Item View / Template
 
 The next thing we are going to create is the Items view/template. In the `app/templates/menu` directory, create an `items.hbs` file with the following code in it:
 
-    <div class="row">
-      <div class="col-sm-3">
-        <h4>Name</h4>
-      </div>
+```html
+<div class="row">
+  <div class="col-sm-3">
+    <h4>Name</h4>
+  </div>
 
-      <div class="col-sm-3">
-        <h4>Quantity</h4>
-      </div>
+  <div class="col-sm-3">
+    <h4>Quantity</h4>
+  </div>
 
-      <div class="col-sm-3">
-        <h4>Cost (per Quantity)</h4>
-      </div>
-    </div>
+  <div class="col-sm-3">
+    <h4>Cost (per Quantity)</h4>
+  </div>
+</div>
 
-    <div data-view-container></div>
+<div data-view-container></div>
+```
 
-The first div (that has a class of "row") is the section that contains the headers for our three columns (Name, Quantity, and Cost). The class of "row" is used to create a horizontal group of columns. For each of the column headers, the class of "col-sm-3" is used to space out the columns. Bootstrap uses a 12 column layout, so these three columns will use up 3/4 of the screen. We will cover more styling later, but for now if you want to read up on the grid system that Bootstrap uses, please click [here](http://getbootstrap.com/css/#grid).
+The first `<div>` (that has a class of "row") is the section that contains the headers for our three columns (Name, Quantity, and Cost). The class of "row" is used to create a horizontal group of columns. For each of the column headers, the class of "col-sm-3" is used to space out the columns. Bootstrap uses a 12 column layout, so these three columns will use up 3/4 of the screen. We will cover more styling later, but for now if you want to read up on the grid system that Bootstrap uses, please click [here](http://getbootstrap.com/css/#grid).
 
-The second div is a placeholder for our individual menu items. The naming convention we will use for this is "data-view-container" since it will be containing the view's data (this will be more apparent when we create the view). Let's create the view for the Items by creating a file called `items.js` in the `app/scripts/views/menu` directory. Put the following code in that file:
+The second `<div>` is a placeholder for our individual menu items. The naming convention we will use for this is "data-view-container" since it will be containing the view's data (this will be more apparent when we create the view). Let's create the view for the Items by creating a file called `items.js` in the `app/scripts/views/menu` directory. Put the following code in that file:
 
-<pre>
+```javascript
 'use strict';
 
 var ItemView = require('./item');
@@ -517,55 +557,59 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   childView: ItemView,
   childViewContainer: '[data-view-container]'
 });
-</pre>
+```
 
-This introduces us to Marionette's CompositeView. There are two views that are similar within Marionette, the CollectionView and the CompositeView. The CollectionView is used to render lists of information without additional functionality needed for each row or any additional HTML wrapper. The CompositeView is useful if you wrap a template around a collection, for example, a list with a header and a footer. CompositeViews are also helpful if you are going to be providing additional functionality around each row.
+This introduces us to Marionette's `CompositeView`. There are two views that are similar within Marionette, the `CollectionView` and the `CompositeView`. The `CollectionView` is used to render lists of information without additional functionality needed for each row or any additional HTML wrapper. The `CompositeView` is useful if you wrap a template around a collection, for example, a list with a header and a footer. `CompositeViews` are also helpful if you are going to be providing additional functionality around each row.
 
-Within the CompositeView, we specify the following:
+Within the `CompositeView`, we specify the following:
 
-- template: The template that is going to be rendered
-- childView: The view that is responsible for each item in the collection
-- childViewContainer: The placeholder on our template where the childView is going to be placed.
+- `template`: The template that is going to be rendered
+- `childView`: The view that is responsible for each item in the collection
+- `childViewContainer`: The placeholder on our template where the childView is going to be placed.
 
-The childView in this case is brought in via the required statement at the top of the file. Let's create that view right now. In the `app/scripts/views/menu` directory, create a file called `item.js` with the following code in it:
+The childView in this case is brought in via the `require` statement at the top of the file. Let's create that view right now. In the `app/scripts/views/menu` directory, create a file called `item.js` with the following code in it:
 
-<pre>
+```javascript
 'use strict';
 
 module.exports = Backbone.Marionette.ItemView.extend({
   template: 'menu/item'
 });
-</pre>
+```
 
-This is utilizing Marionette's ItemView. We indicate in the template property which template this view will render. Now in the `app/templates/menu` directory, create a file called `item.hbs` with the following content in it:
+This is utilizing Marionette's `ItemView`. We indicate in the template property which template this view will render. Now in the `app/templates/menu` directory, create a file called `item.hbs` with the following content in it:
 
-    <div class="row">
-      <div class="col-sm-3">
-        {{name}}
-      </div>
+```html
+<div class="row">
+  <div class="col-sm-3">
+    {{name}}
+  </div>
 
-      <div class="col-sm-3">
-        {{quantity}}
-      </div>
+  <div class="col-sm-3">
+    {{quantity}}
+  </div>
 
-      <div class="col-sm-3">
-        {{cost}}
-      </div>
-    </div>
+  <div class="col-sm-3">
+    {{cost}}
+  </div>
+</div>
+```
 
-The main div has a class of "row" to create a horizontal group of columns, and each column has the class of "col-sm-3" just like our headers did above. The handlebars placeholders {{name}} etc. match up with the names of the attributes within the models. (Each attribute name for the menu item model defaults from what they were set as in the json file.)
+The main `<div>` has a class of "row" to create a horizontal group of columns, and each column has the class of "col-sm-3" just like our headers did above. The handlebars placeholders `{{name}}` etc. match up with the names of the attributes within the models. (Each attribute name for the menu item model defaults from what they were set as in the json file.)
 
-The last piece we need to get this all wired up is the controller. Within the `app/scripts/controllers/application.js` file, We will need to add these require statements to the top of the file after the line that is `var HomeView = require('../views/home/layout');`
+#### The Controller
 
-<pre>
+The last piece we need to get this all wired up is the controller. Within the `app/scripts/controllers/application.js` file, we will need to add these require statements to the top of the file after the line that is `var HomeView = require('../views/home/layout');`
+
+```javascript
 var MenuItemsCollection = require('../collections/menu-items');
 var MenuItemsView = require('../views/menu/items');
 var MenuView = require('../views/menu/layout');
-</pre>
+```
 
 Then we need to modify the menu function so that it looks like this:
 
-<pre>
+```javascript
 ...
   menu: function() {
     Backbone.history.navigate('#/menu');
@@ -582,94 +626,97 @@ Then we need to modify the menu function so that it looks like this:
     });
   },
 ...
+```
 
-</pre>
+We still navigate to the menu route as we did before (`Backbone.history.navigate('#/menu');` ). We create an instance of the menu layout view and show it in the Application's main content area. Then we create an instance of the `MenuItemsCollection` and perform a fetch on it. 
 
-We still navigate to the menu route as we did before (Backbone.history.navigate('#/menu'); ). We create an instance of the menu layout view and show it in the Application's main content area. Then we create an instance of the MenuItemsCollection and perform a fetch on it. 
+The following lines might need a little more explanation:
 
-There is some detailed explaining we need to do with these lines:
-
-      layout.menuItems.show(new MenuItemsView({
-        collection: menuItems
-      }));
+```javascript
+layout.menuItems.show(new MenuItemsView({
+  collection: menuItems
+}));
+```
 
 If you remember, back in our menu's layout view (`app/scripts/views/menu/layout.js`), we had these lines:
 
-    regions: {
-      menuItems: '[data-view=menu-items]'
-    }
+```javascript
+regions: {
+  menuItems: '[data-view=menu-items]'
+}
+```
 
-So what the code `layout.menuItems.show` is doing is referencing the `menuItems` property on the layout view, and showing a new instance of the MenuItemsView in it. When this instance of the MenuItemsView is created, it is passed a property of `collection` that is set to what is returned from the json file in the `menuItems` variable. `collection` is a property on Marionette's CompositeView. 
+So what the code `layout.menuItems.show` is doing is referencing the `menuItems` property on the layout view, and showing a new instance of the `MenuItemsView` in it. When this instance of the `MenuItemsView` is created, it is passed a property of `collection` that is set to what is returned from the json file in the `menuItems` variable. `collection` is a property on Marionette's `CompositeView`. 
 
-Now if you run the `grunt serve` command, you should be able to click on the Menu and see the data from the json file.
+Now if you stop any running grunt processes and run the `grunt serve` command, you should be able to click on the Menu and see the data from the json file.
 
 ## Directions page
 
-The directions page is going to be pretty static. The customer has requested that we offer text directions from the south, east and west, as well as an imbedded google map. (The address used for this example is just an arbitrary/generic address in the Little Italy section of Cleveland, Ohio.)
+The directions page is going to be pretty static. The customer has requested that we offer text directions from the south, east and west, as well as an embedded google map. (The address used for this example is just an arbitrary/generic address in the Little Italy section of Cleveland, Ohio.)
 
 First let's create our template, so in the `app/templates` directory, let's create a directory called `directions` and a file within there called `layout.hbs` with the following content in it:
 
-    <h1>Directions</h1>
+```html
+<h1>Directions</h1>
 
-    <div class="row">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2987.8100475723472!2d-81.59813599999998!3d41.50839099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8830fc7400395c95%3A0xd86a1ac754067ba2!2s12110+Mayfield+Rd%2C+Cleveland%2C+OH+44106!5e0!3m2!1sen!2sus!4v1408996575401" width="600" height="450" frameborder="0" style="border:0"></iframe>
-    </div>
+<div class="row">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2987.8100475723472!2d-81.59813599999998!3d41.50839099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8830fc7400395c95%3A0xd86a1ac754067ba2!2s12110+Mayfield+Rd%2C+Cleveland%2C+OH+44106!5e0!3m2!1sen!2sus!4v1408996575401" width="600" height="450" frameborder="0" style="border:0"></iframe>
+</div>
 
-    <div class="row">
-      <div class="col-sm-4">
-        <h4>From the South</h4>
+<div class="row">
+  <div class="col-sm-4">
+    <h4>From the South</h4>
 
-        <h6>Take 77 North to 90 East</h6>
-        <h6>Take Exit 173B for Chester Ave</h6>
-        <h6>Take a right onto Chester Ave</h6>
-        <h6>After about 3 miles, turn left onto Euclid Ave</h6>
-        <h6>After .5 mile, turn right onto Mayfield Rd</h6>
-      </div>
+    <h6>Take 77 North to 90 East</h6>
+    <h6>Take Exit 173B for Chester Ave</h6>
+    <h6>Take a right onto Chester Ave</h6>
+    <h6>After about 3 miles, turn left onto Euclid Ave</h6>
+    <h6>After .5 mile, turn right onto Mayfield Rd</h6>
+  </div>
 
-      <div class="col-sm-4">
-        <h4>From the West</h4>
+  <div class="col-sm-4">
+    <h4>From the West</h4>
 
-        <h6>Take 90 East</h6>
-        <h6>Take Exit 173B for Chester Ave</h6>
-        <h6>Take a right onto Chester Ave</h6>
-        <h6>After about 3 miles, turn left onto Euclid Ave</h6>
-        <h6>After .5 mile, turn right onto Mayfield Rd</h6>
-      </div>
+    <h6>Take 90 East</h6>
+    <h6>Take Exit 173B for Chester Ave</h6>
+    <h6>Take a right onto Chester Ave</h6>
+    <h6>After about 3 miles, turn left onto Euclid Ave</h6>
+    <h6>After .5 mile, turn right onto Mayfield Rd</h6>
+  </div>
 
-      <div class="col-sm-4">
-        <h4>From the East</h4>
+  <div class="col-sm-4">
+    <h4>From the East</h4>
 
-        <h6>Take 90 West</h6>
-        <h6>Take Exit 177 for Martin Luther King Junior Drive</h6>
-        <h6>After about 2.5 miles, at the traffic circle, take the 3rd exit onto East Blvd</h6>
-        <h6>Take a slight left onto Ford Dr</h6>
-        <h6>Continue onto Mayfield Rd</h6>
-      </div>
-    </div>
-
+    <h6>Take 90 West</h6>
+    <h6>Take Exit 177 for Martin Luther King Junior Drive</h6>
+    <h6>After about 2.5 miles, at the traffic circle, take the 3rd exit onto East Blvd</h6>
+    <h6>Take a slight left onto Ford Dr</h6>
+    <h6>Continue onto Mayfield Rd</h6>
+  </div>
+</div>
+```
 
 Let's create the view that will render our template. In the `app/scripts/views` directory, create a folder called `directions` and in there a file called `layout.js` with the following code in it:
 
-<pre>
+```javascript
 'use strict';
 
 module.exports = Backbone.Marionette.ItemView.extend({
   template: 'directions/layout'
 });
-</pre>
+```
 
-Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add `var DirectionsView = require('../views/directions/layout');`. Modify the directions function so it looks like this:
+Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add `var DirectionsView = require('../views/directions/layout');`. Modify the `directions` function so it looks like this:
 
-<pre>
+```javascript
   directions: function() {
     Backbone.history.navigate('#/directions');
 
     var layout = new DirectionsView();
     Application.app.content.show(layout);
   },
-</pre>
+```
 
-With this code, we create an instance of the DirectionsView and add it to the main application's content area.
+With this code, we create an instance of the `DirectionsView` and add it to the main application's content area.
 
 Run `grunt serve` and click on the Directions link in the menu bar to view the changes we've made so far.
-

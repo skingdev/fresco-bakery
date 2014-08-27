@@ -418,12 +418,12 @@ module.exports = {
 
 What we are seeing here are two copy tasks called "bootstrapFonts" and "static". The "bootstrapFonts" task copies all of bootstrap's fonts into our output directory, and the "static" task copies all of our images to our output directory. The output directory is where all of our files are served out of as we are doing development, so if you have already run `grunt serve`, you can look in the output directory, which is the `.dev` folder, and see "fonts" and "images" folders. What we want to do is add our data folder to the `.dev` folder as well. In the `copy.js` file you have open, add the following as another task after "static":
 
-<pre>
+```javascript
   data: {
     src: 'data/menu.json',
     dest: '<%= folders.output %>' + '/'
   }
-</pre>
+```
 
 So the file should look like this:
 

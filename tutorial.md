@@ -349,11 +349,11 @@ Then in the `defaultRoute` function, place this line under the `Backbone.history
 Application.app.content.show(new HomeView());
 ```
 
-Finally, you will have to restart the grunt process that is running our
-webserver. While it will automatically adjust as you edit files, it will
-not be able to see new template files until you restart.
+Finally, you will have to restart the grunt process that is running our webserver. While it will automatically adjust as you edit files, it will not be able to see new template files until you restart. If you had the webpage still open, you may need to refresh it as well.
 
-Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route.
+Your should now see the text we entered in appear on the Home page (and for now it will also appear on the other pages if you click on the different menu bar options, but we will fix that later). You will also notice that if you click on the "Menu" link that is within the text, the url will change to the `menu` route and the 'active' state of the option in the menu bar will change as well.
+
+![Home page](/tutorial/HomePage.jpg?raw=true "Home page")
 
 ## Menu page
 

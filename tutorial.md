@@ -16,12 +16,12 @@
     - [Menu page - data/Collection/Model](#user-content-menu-page---datacollectionmodel)
     - [Menu page - Views/Templates](#user-content-menu-page---viewstemplates)
 - [Directions page](#user-content-directions-page)
+- [Milestone 1](#user-content-milestone-1)
 
 ## Overview
 
-This tutorial covers the basics of creating a static website for a 
-fictitious bakery. The components that we will be using are covered in
-the "components" section. There is a branch called "finished-app" that contains the code that matches up with the finished tutorial.
+This tutorial covers the basics of creating a static website for a fictitious bakery. The components that we will be using are covered in
+the "components" section. This tutorial is set up with milestone markers in it that are placeholders for steps along the way. There are branches called "milestone-1", etc. that match up with the corresponding areas in the tutorial. These milstones will be noted along the way. To jump to a certain milestone, you can either click it in the Table of Contents, or search the tutorial for "milestone". There is also a branch called "finished-app" that contains the code that matches up with the finished tutorial.
 
 ## Let's get this out of the way
 
@@ -732,3 +732,8 @@ With this code, we create an instance of the `DirectionsView` and add it to the 
 Run `grunt serve` and click on the Directions link in the navigation bar to view the changes we've made so far.
 
 ![Directions page](/tutorial/DirectionsPage.jpg?raw=true "Directions page")
+
+# Milestone 1
+
+This is the first milestone marker in the tutorial. If you have not walked through the tutorial up to this point, you can checkout the branch called "milestone-1" to get the code that matches up with the tutorial to this point.
+

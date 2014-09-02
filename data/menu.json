@@ -1,0 +1,22 @@
+[
+    {
+        "name": "rolls",
+        "quantity": "1",
+        "cost": ".25"
+    },
+    {
+        "name": "rolls",
+        "quantity": "12",
+        "cost": "2.50"
+    },
+    {
+        "name": "sub buns",
+        "quantity": "1",
+        "cost": ".30"
+    },
+    {
+        "name": "sub buns",
+        "quantity": "12",
+        "cost": "3.00"
+    }
+]

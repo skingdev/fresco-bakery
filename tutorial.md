@@ -16,12 +16,13 @@
     - [Menu page - data/Collection/Model](#user-content-menu-page---datacollectionmodel)
     - [Menu page - Views/Templates](#user-content-menu-page---viewstemplates)
 - [Directions page](#user-content-directions-page)
+- [Milestone 1](#user-content-milestone-1)
+- [Adding some style](#user-content-adding-some-style)
 
 ## Overview
 
-This tutorial covers the basics of creating a static website for a 
-fictitious bakery. The components that we will be using are covered in
-the "components" section. There is a branch called "finished-app" that contains the code that matches up with the finished tutorial.
+This tutorial covers the basics of creating a static website for a fictitious bakery. The components that we will be using are covered in
+the "components" section. This tutorial is set up with milestone markers in it that are placeholders for steps along the way. There are branches called "milestone-1", etc. that match up with the corresponding areas in the tutorial. These milstones will be noted along the way. To jump to a certain milestone, you can either click it in the Table of Contents, or search the tutorial for "milestone". There is also a branch called "finished-app" that contains the code that matches up with the finished tutorial.
 
 ## Let's get this out of the way
 
@@ -732,3 +733,230 @@ With this code, we create an instance of the `DirectionsView` and add it to the 
 Run `grunt serve` and click on the Directions link in the navigation bar to view the changes we've made so far.
 
 ![Directions page](/tutorial/DirectionsPage.jpg?raw=true "Directions page")
+
+# Milestone 1
+
+This is the first milestone marker in the tutorial. If you have not walked through the tutorial up to this point, you can checkout the branch called "milestone-1" to get the code that matches up with the tutorial to this point.
+
+## Adding some style
+
+### Home page style
+
+Let's start adding some style to the site. On the Home page (`app/templates/home/layout.hbs`), we have our paragraph that talks about the bakery, but it looks a little plain. At this point, the markup looks like this:
+
+```html
+<div class="container">
+<p>
+Fresco Bakery was created in 1970 by Mario Fresco. We still use the same recipes today that he used when the bakery
+was established. We offer a large variety of bakery items including breads, rolls, pastas, muffins, cookies and
+cakes. For a full listing of all of the items we offer, please check out our <a href="#/menu">Menu</a> page.
+</p>
+</div>
+```
+
+Change that markup to be this instead:
+
+```html
+<div class="container">
+  <div class="row">
+    <img src="images/bakery-case-1.png" class="img-responsive" alt="Bakery case one">
+    <img src="images/bakery-case-2.png" class="img-responsive" alt="Bakery case two">
+  </div>
+  <div class="row">
+    <p>
+    Fresco Bakery was created in 1970 by Mario Fresco. We still use the same recipes today that he used when the bakery was established. We offer a large variety of bakery items including breads, rolls, pastas, muffins, cookies and cakes. For a full listing of all of the items we offer, please check out our <a href="#/menu">Menu</a> page.
+    </p>
+  </div>
+</div>
+```
+
+What we are doing here is creating two rows for our content. This will help with the organization and responsiveness of our application. Having a responsive web page means that as the browser size changes (whether it be from a user resizing the browser window, or just based on the device they are using such as browser, tablet or phone), the layout of the page changes as well. Due to the limited size of screens on smartphones, you may not want to display certain pictures, content, or you may want to change the layout of your site from being stacked horizontally to vertically. 
+
+The first row has two image tags in it that we will use for the Home page. The second row will be for displaying the bakery overview. If you save these changes and refresh the web page, you should see something similar to this:
+
+![Home page styled - step 1](/tutorial/HomePageStyled1.jpg?raw=true "Home page styled - step 1")
+
+Now this is OK, but the images takes up quite a bit of real estate, so let's style them so they are next to each other. To do this, wrap each image in a div and give each div the class of `col-lg-6`:
+
+```html
+    <div class="col-lg-6">
+      <img src="images/bakery-case-1.png" class="img-responsive" alt="Bakery case one">
+    </div>
+    <div class="col-lg-6">
+      <img src="images/bakery-case-2.png" class="img-responsive" alt="Bakery case two">
+    </div>
+```
+
+If you refresh the page and don't see this, you may need to enlarge your browser:
+
+![Home page styled - step 2](/tutorial/HomePageStyled2.jpg?raw=true "Home page styled - step 2")
+
+Again, it's OK, but let's continue to make it better. If you inspect the first image, and click on the div for it:
+
+![Home page styled - Inspect element](/tutorial/HomePageStyleInspect.jpg?raw=true "Home page styled - Inspect element")
+
+You will notice that there is some padding on the left and right (highlighted by the light green color, and also in the Styles tab). By default, Bootstrap's columns add padding on the left and right. We can override this though, so that's what we will cover next. 
+
+### Overriding Bootstrap styles
+
+In the `app/styles` directory, you'll see some `.less` files. When we compile our project using the `grunt serve` command, one of the tasks grunt runs is getting all of the style (`.less`) files specified in the `app.less` file and creating the css file for our application. This grunt task can be seen if you look at the file `tasks/config/less.js`:
+
+```javascript
+'use strict';
+
+module.exports = {
+  options: {
+    paths: [
+      '<%= folders.bower %>/'
+    ]
+  },
+
+  development: {
+    files: [{
+      dest: '<%= folders.output %>/<%= filenames.css %>',
+      src: '<%= folders.styles %>/app.less'
+    }]
+  },
+
+  dist: {
+    files: [{
+      dest: '<%= folders.output %>/<%= filenames.css %>',
+      src: '<%= folders.styles %>/app.less'
+    }]
+  },
+
+  test: {
+    files: [{
+      dest: '<%= folders.output %>/<%= filenames.css %>',
+      src: '<%= folders.styles %>/app.less'
+    }]
+  }
+};
+
+```
+
+One of the first questions you may ask is, what are the different options in this grunt file and how do I get more information on them? Each of the tasks in the `tasks/config` folder are configuration options for a grunt plugin that was brought in through the `npm install` command we ran during the setup in the [README.md](README.md) file. To detemine which plugin, look at the filename (in this case `less.js`). Most of the filenames in the `tasks/config` folder match up with the grunt plugins in the convention of "grunt-contrib-" and whatever the filename is (in this case "grunt-contrib-less"). To verify this is the case, look in the `package.json` file that is in the root of our project. In there you will see something similar to `    "grunt-contrib-less": "~0.11.1"`. Now if we search online for `grunt-contrib-less`, you will find this link: [https://github.com/gruntjs/grunt-contrib-less](https://github.com/gruntjs/grunt-contrib-less). The README.md file on their site will decribe how to use the plugin. With this knowledge, we can look at our `tasks/config/less.js` file and here is what each section means:
+
+```javascript
+  options: {
+    paths: [
+      '<%= folders.bower %>/'
+    ]
+  },
+```
+
+The path we specified here tells the plugin which folder to search in (other than our `app/styles` folder) for `.less` files. Like most of the variables, the `folders.bower` variable is defined in the `Gruntfile.js` file that is in the root of our project. Its value is "bower_components". __Keep note of this because we'll talk about why this is important in a moment__.
+
+The `development`, `dist` and `test` sections have the same values, so we'll just go over them once:
+
+```javascript
+      dest: '<%= folders.output %>/<%= filenames.css %>',
+      src: '<%= folders.styles %>/app.less'
+```
+
+The `src` is the file this plugin should use as a main entry point for all of the css we need for our site (more on that in a second). The `dest` is the destination of the css file that gets compiled. In this case, the variable `folders.output` is not defined in the `Gruntfile.js`, it is defined in the `tasks/output.js` file since our output folder changes based on how we want to run our application. Our `dest` when we run `grunt serve` is `.dev/fresco-0.0.0.css`.
+
+We said a second ago that `src` is the main entry point for all the css for our site. This means our `app.less` file is the main entry point, so let's take a look at it:
+
+```less
+// Core variables
+@import "bootstrap/less/variables.less";
+@import "variables.less";
+
+// Boostrap files for app
+@import "bootstrap.less";
+
+// Custom styles + overrides
+@import "navbar.less";
+```
+
+The `grunt-contrib-less` plugin searches for each `.less` file first in the `bower_components` folder (from our __Keep note ...__ above), then if it can't find the file there, it will look in our `app/styles` folder. So what our `app.less` file is doing with the first import is bringing in Bootstrap's variables they have defined. (The reason the `options` section of the config file is important is the path in the `app.less` is relative to it, meaning for the first import, it is actual looking in `bower_components/bootstrap/less/variables.less`) 
+
+Then the next import (`@import "variables.less";`) overrides the appropriate Bootstrap variables with the ones defined in our `variables.less` file in the `app/styles` directory. 
+
+It then looks at the `bootstrap.less` file in the `app/styles` directory which brings in all of Bootstrap's styles. 
+
+The last import is an override for Bootstrap styles. 
+
+### Back to fixing our column padding
+
+In the `app/styles` directory, we need to create a file that will allow us to create a customized style. We don't want to just name it anything though, we want to keep it consistent with Bootstrap's conventions if possible. What we need to determine is where Bootstrap is managing column styles. If you look in `bower_components/bootstrap/less`, this is where their styles are defined. After some searching for the word "column", you will be pointed to a few different files, but the one we want is `grid.less`. This is where the column style is set (even though it is using a mixin, which is a topic for later). For consistency, let's name our file that same, so in the `app/styles` directory, create a `grid.less` file with the following in it:
+
+```less
+.no-padding {
+  padding: 0;
+}
+
+```
+
+Since we've added a new `.less` file, we need to tell the application to bring it in. At the end of the `app/styles/app.less` file, add this line:
+
+```less
+@import "grid.less";
+```
+
+Now modify the divs to include the `no-padding` class:
+
+```html
+    <div class="col-lg-6 no-padding">
+      <img src="images/bakery-case-1.png" class="img-responsive" alt="Bakery case one">
+    </div>
+    <div class="col-lg-6 no-padding">
+      <img src="images/bakery-case-2.png" class="img-responsive" alt="Bakery case two">
+    </div>
+```
+
+This mushes them together, and if you make your browser smaller, you'll see this:
+
+![Home page styled - step 3](/tutorial/HomePageStyled3.jpg?raw=true "Home page styled - step 3")
+
+Our main text looks like this:
+
+```html
+  <div class="row">
+    <p>
+    Fresco Bakery was created in 1970 by Mario Fresco. We still use the same recipes today that he used when the bakery was established. We offer a large variety of bakery items including breads, rolls, pastas, muffins, cookies and cakes. For a full listing of all of the items we offer, please check out our <a href="#/menu">Menu</a> page.
+    </p>
+  </div>
+```
+
+Let's change it to be this instead:
+
+```html
+  <div class="row">
+    <div class="well lead">
+    Fresco Bakery was created in 1970 by Mario Fresco. We still use the same recipes today that he used when the bakery was established. We offer a large variety of bakery items including breads, rolls, pastas, muffins, cookies and cakes. For a full listing of all of the items we offer, please check out our <a href="#/menu">Menu</a> page.
+    </div>
+  </div>
+```
+
+What we've done here is changed the `<p>` tag to be a `div` with two classes on it. The `well` class gives the div some padding and a slight background color, and the `lead` class makes it stand out by giving it larger bolder text. If you refresh the page, it should look like this:
+
+![Home page styled - step 4](/tutorial/HomePageStyled4.jpg?raw=true "Home page styled - step 4")
+
+### Menu page style
+
+Right now, our menu page looks like this:
+
+![Menu page](/tutorial/MenuPage.jpg?raw=true "Menu Page")
+
+Let's add some styles to the rows so they look a little nicer. To do this, we'll need to add another file to the `app/styles` directory called `forms.less` with this content in it:
+
+```less
+.div-row {
+  padding: 3px 0px 5px 0px;
+  border: gainsboro 1px solid;
+  background-color: ghostwhite;
+}
+
+```
+
+Again, since we've added a file, we'll need to include this new file in the `app/styles/app.less` file. So add this line to the end of that file:
+
+```less
+@import "forms.less";
+```
+
+Now we'll need to put our new class on the appropriate div. In the `app/templates/menu/item.hbs` file, add the `div-row` class to the `<div class="row">` so that it looks like this: `<div class="row div-row">`. Refresh the menu page and you should see something like this:
+
+![Menu page styled - step 1](/tutorial/MenuPageStyled1.jpg?raw=true "Menu Page Styled step 1")

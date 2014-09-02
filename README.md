@@ -2,7 +2,7 @@
 
 ## Tutorial
 
-After you've completed the steps below for the installation, if you want, take a look at the [tutorial](tutorial.md) for a walkthrough and explanation of creating a sample web site based on this source code. There is a branch called "finished-app" that contains the code that matches up with the finished tutorial.
+After you've completed the steps below for the installation, if you want, take a look at the [tutorial](tutorial.md) for a walkthrough and explanation of creating a sample web site based on this source code. The tutorial is set up with milestone markers in it that are placeholders for steps along the way. There are branches called "milestone-1", etc. that match up with the corresponding areas in the tutorial. There is also branch called "finished-app" that contains the code that matches up with the finished tutorial.
 
 ## Installation
 

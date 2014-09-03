@@ -12,10 +12,10 @@
 - [Application requirements](#user-content-application-requirements)
 - [Navigation bar](#user-content-navigation-bar)
 - [Main page (Home Page)](#user-content-main-page-home-page)
+- [Directions page](#user-content-directions-page)
 - [Menu page](#user-content-menu-page)
     - [Menu page - data/Collection/Model](#user-content-menu-page---datacollectionmodel)
     - [Menu page - Views/Templates](#user-content-menu-page---viewstemplates)
-- [Directions page](#user-content-directions-page)
 - [Milestone 1](#user-content-milestone-1)
 - [Adding some style](#user-content-adding-some-style)
 
@@ -265,7 +265,28 @@ photos: function() {
 
 Now the last piece we need to add to get our functionality working is within the view. Views can handle events triggered from the DOM as well as setting values within the DOM. Views are placed into the page by the controllers. In the case of the header view, it is a little unique in that it is being placed by the base controller. This is because we want our header and footer displayed as part of every route we hit. If the relationship between views and controllers isn't clear yet, don't worry, we will go over some simpler examples later. 
 
-The view that we will be working with to handle the clicking of our navigation bar is found at `app/scripts/views/application/header.js`. The line within this file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
+The view that we will be working with to handle the clicking of our navigation bar is found at `app/scripts/views/application/header.js`. 
+
+Let's look at this line of code within that file:
+
+`module.exports = Backbone.Marionette.ItemView.extend({`
+
+We are using the CommonJS pattern for our application, which gives us the benefits of:
+
+1. Splitting the code up into separate module components
+2. Dependency management
+3. Scope isolation
+4. Namespacing. 
+
+CommonJS accomplishes these by using "require" and "exports". The `module.exports` says that when someone requires this file, whatever is to the right of the equal sign is what they are going to be returned and have access to. The `Backbone.Marionette.ItemView.extend({` is saying that we are going to make a new class that uses Marionette's ItemView as a base class, and extends the object that falls within the {} (within the `extend()` method). 
+
+The require statement of CommonJS is how you bring this module into another file. To do this, you just use syntax similar to this (the pathing is relative, which can be cumbersome, but there are ways around that which we will address in the future):
+
+```javascript
+var HeaderView = require('../views/application/header');
+```
+
+The line within that file `template: 'application/header'` is what specifies the location of the template (markup) the view will render and handle. Put a comma at the end of the line `template: 'application/header'` and paste the following code after that line:
 
 ```javascript
   ui: {
@@ -358,6 +379,83 @@ Your should now see the text we entered in appear on the Home page (and for now 
 
 ![Home page](/tutorial/HomePage.jpg?raw=true "Home page")
 
+## Directions page
+
+The directions page is going to be pretty static. The customer has requested that we offer text directions from the south, east and west, as well as an embedded google map. (The address used for this example is just an arbitrary/generic address in the Little Italy section of Cleveland, Ohio.)
+
+First let's create our template, so in the `app/templates` directory, let's create a directory called `directions` and a file within there called `layout.hbs` with the following content in it:
+
+```html
+<h1>Directions</h1>
+
+<div class="row">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2987.8100475723472!2d-81.59813599999998!3d41.50839099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8830fc7400395c95%3A0xd86a1ac754067ba2!2s12110+Mayfield+Rd%2C+Cleveland%2C+OH+44106!5e0!3m2!1sen!2sus!4v1408996575401" width="600" height="450" frameborder="0" style="border:0"></iframe>
+</div>
+
+<div class="row">
+  <div class="col-sm-4">
+    <h4>From the South</h4>
+
+    <h6>Take 77 North to 90 East</h6>
+    <h6>Take Exit 173B for Chester Ave</h6>
+    <h6>Take a right onto Chester Ave</h6>
+    <h6>After about 3 miles, turn left onto Euclid Ave</h6>
+    <h6>After .5 mile, turn right onto Mayfield Rd</h6>
+  </div>
+
+  <div class="col-sm-4">
+    <h4>From the West</h4>
+
+    <h6>Take 90 East</h6>
+    <h6>Take Exit 173B for Chester Ave</h6>
+    <h6>Take a right onto Chester Ave</h6>
+    <h6>After about 3 miles, turn left onto Euclid Ave</h6>
+    <h6>After .5 mile, turn right onto Mayfield Rd</h6>
+  </div>
+
+  <div class="col-sm-4">
+    <h4>From the East</h4>
+
+    <h6>Take 90 West</h6>
+    <h6>Take Exit 177 for Martin Luther King Junior Drive</h6>
+    <h6>After about 2.5 miles, at the traffic circle, take the 3rd exit onto East Blvd</h6>
+    <h6>Take a slight left onto Ford Dr</h6>
+    <h6>Continue onto Mayfield Rd</h6>
+  </div>
+</div>
+```
+
+Let's create the view that will render our template. In the `app/scripts/views` directory, create a folder called `directions` and in there a file called `layout.js` with the following code in it:
+
+```javascript
+'use strict';
+
+module.exports = Backbone.Marionette.ItemView.extend({
+  template: 'directions/layout'
+});
+```
+
+Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add the line:
+
+`var DirectionsView = require('../views/directions/layout');`. 
+
+Modify the `directions` function so it looks like this:
+
+```javascript
+  directions: function() {
+    Backbone.history.navigate('#/directions');
+
+    var layout = new DirectionsView();
+    Application.app.content.show(layout);
+  },
+```
+
+With this code, we create an instance of the `DirectionsView` and add it to the main application's content area.
+
+Run `grunt serve` and click on the Directions link in the navigation bar to view the changes we've made so far.
+
+![Directions page](/tutorial/DirectionsPage.jpg?raw=true "Directions page")
+
 ## Menu page
 
 For our menu page, the customer asked that for now we just list each item's name, quantity, and cost. Later we will add pictures of each of these items. In this topic, we are going to be covering Backbone's Collections and Models, as well as Marionette's `CompositeView` and `ItemView`, which are common for displaying lists of information.
@@ -366,7 +464,7 @@ For our menu page, the customer asked that for now we just list each item's name
 
 We will read the information for the menu items from a data file that is in a json format. 
 
-Create a folder in the root of the project called `data`. Within that folder, create a file called `menu.json` with the following content in it:
+Create a folder in the root of the project (`fresco-bakery/`) called `data`. Within that folder, create a file called `menu.json` with the following content in it:
 
 ```javascript
 [
@@ -463,7 +561,7 @@ Finally, since we altered the main Grunt workflow, you should restart the proces
 
 #### Consuming Menu Data
 
-A Backbone Collection is what is going to obtain our data from the `menu.json` file, and store it so we can use it in our view. The first thing we need to do is create a directory called "collections" in our `app/scripts` directory. In that directoy, create a file called `menu-items.js` with the following code in it:
+A Backbone Collection is what is going to obtain our data from the `menu.json` file, and store it so we can use it in our view. The first thing we need to do is create a directory called "collections" in our `app/scripts` directory. In that directory, create a file called `menu-items.js` with the following code in it:
 
 ```javascript
 'use strict';
@@ -477,7 +575,7 @@ module.exports = Backbone.Collection.extend({
 
 This is how we will define a Backbone Collection. The "url" property specifies the location of the data. This can be something like an API endpoint, or as in this case, a file that contains data in a json format. When you call `fetch` on the collection, Backbone uses the url property to determine where to get the data from. 
 
-In this particular instance, we don't need to define a model for each menu item, because Backbone does this for us automatically. I prefer explicit code over implicit code though, because it makes it easier for someone not familiar with your application to trace through what is happening, and provides for some consistency. That being said, let's create a menu item model.
+In this particular instance, we don't need to define a model for each menu item, because Backbone creates instances of (the generic) Backbone.Model for you. I prefer explicit code over implicit code though, because it makes it easier for someone not familiar with your application to trace through what is happening, and provides for some consistency. That being said, let's create a menu item model.
 
 Create a directory called "models" in our `app/scripts` directory. In that directory, create a file called `menu-item.js` with the following code in it:
 
@@ -656,83 +754,6 @@ So what the code `layout.menuItems.show` is doing is referencing the `menuItems`
 Now if you stop any running grunt processes and run the `grunt serve` command, you should be able to click on the Menu and see the data from the json file.
 
 ![Menu page](/tutorial/MenuPage.jpg?raw=true "Menu Page")
-
-## Directions page
-
-The directions page is going to be pretty static. The customer has requested that we offer text directions from the south, east and west, as well as an embedded google map. (The address used for this example is just an arbitrary/generic address in the Little Italy section of Cleveland, Ohio.)
-
-First let's create our template, so in the `app/templates` directory, let's create a directory called `directions` and a file within there called `layout.hbs` with the following content in it:
-
-```html
-<h1>Directions</h1>
-
-<div class="row">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2987.8100475723472!2d-81.59813599999998!3d41.50839099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8830fc7400395c95%3A0xd86a1ac754067ba2!2s12110+Mayfield+Rd%2C+Cleveland%2C+OH+44106!5e0!3m2!1sen!2sus!4v1408996575401" width="600" height="450" frameborder="0" style="border:0"></iframe>
-</div>
-
-<div class="row">
-  <div class="col-sm-4">
-    <h4>From the South</h4>
-
-    <h6>Take 77 North to 90 East</h6>
-    <h6>Take Exit 173B for Chester Ave</h6>
-    <h6>Take a right onto Chester Ave</h6>
-    <h6>After about 3 miles, turn left onto Euclid Ave</h6>
-    <h6>After .5 mile, turn right onto Mayfield Rd</h6>
-  </div>
-
-  <div class="col-sm-4">
-    <h4>From the West</h4>
-
-    <h6>Take 90 East</h6>
-    <h6>Take Exit 173B for Chester Ave</h6>
-    <h6>Take a right onto Chester Ave</h6>
-    <h6>After about 3 miles, turn left onto Euclid Ave</h6>
-    <h6>After .5 mile, turn right onto Mayfield Rd</h6>
-  </div>
-
-  <div class="col-sm-4">
-    <h4>From the East</h4>
-
-    <h6>Take 90 West</h6>
-    <h6>Take Exit 177 for Martin Luther King Junior Drive</h6>
-    <h6>After about 2.5 miles, at the traffic circle, take the 3rd exit onto East Blvd</h6>
-    <h6>Take a slight left onto Ford Dr</h6>
-    <h6>Continue onto Mayfield Rd</h6>
-  </div>
-</div>
-```
-
-Let's create the view that will render our template. In the `app/scripts/views` directory, create a folder called `directions` and in there a file called `layout.js` with the following code in it:
-
-```javascript
-'use strict';
-
-module.exports = Backbone.Marionette.ItemView.extend({
-  template: 'directions/layout'
-});
-```
-
-Then in the `app/scripts/controllers/application.js` file, we will need to add a require statement for our view, so after the `var BaseController = require('./base');` line, add the line:
-
-`var DirectionsView = require('../views/directions/layout');`. 
-
-Modify the `directions` function so it looks like this:
-
-```javascript
-  directions: function() {
-    Backbone.history.navigate('#/directions');
-
-    var layout = new DirectionsView();
-    Application.app.content.show(layout);
-  },
-```
-
-With this code, we create an instance of the `DirectionsView` and add it to the main application's content area.
-
-Run `grunt serve` and click on the Directions link in the navigation bar to view the changes we've made so far.
-
-![Directions page](/tutorial/DirectionsPage.jpg?raw=true "Directions page")
 
 # Milestone 1
 

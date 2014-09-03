@@ -608,7 +608,7 @@ Let's start by creating a "menu" directory in our `app/templates` directory. In 
 
 In here, we have our header "Menu", and then a placeholder for the menu items. The convention we are using here is when you have a placeholder that is being used for a view, we will give it a property of `data-view` and set it equal to the name of the view. (There is no automatic mapping based on name here, so we could've set it to `data-view="generic-thing"`, but for ease of tracing the code and consistency, we will name it the same name as the view)
 
-Since we have our layout template, let's create its view. Create a "menu" directory in the `app/views` directory and then within there, create a `layout.js` file with the following content in it:
+Since we have our layout template, let's create its view. Create a "menu" directory in the `app/scripts/views` directory and then within there, create a `layout.js` file with the following content in it:
 
 ```javascript
 'use strict';

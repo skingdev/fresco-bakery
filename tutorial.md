@@ -218,6 +218,14 @@ The html that gives us our navigation bar is the section of the code that is:
 
 You will notice that as you click on the navigation bar options that the url changes at the top, but the 'active' state of the navigation bar option doesn't change. This is because the href has been setup but we aren't handling the route changes yet. 
 
+### Backbone flow
+
+Before we continue, this is a good point to show the flow that Backbone uses. After we walk through some code, we'll come back to this using specific items from our site.
+
+![Backbone flow](/tutorial/BackboneFlow.jpg?raw=true "Backbone flow")
+
+### Back to the navigation functionality
+
 There are a few files we'll need to change to get the functionality working, so first open up the `app/scripts/routers/application.js` file. In it you will see we only have one route defined which is our default route:
 
 ```javascript
@@ -755,6 +763,27 @@ Now if you stop any running grunt processes and run the `grunt serve` command, y
 
 ![Menu page](/tutorial/MenuPage.jpg?raw=true "Menu Page")
 
+Now let's talk about the Backbone flow using the Menu Page as an example, referencing our diagram from above:
+
+![Backbone flow](/tutorial/BackboneFlow.jpg?raw=true "Backbone flow")
+
+__Router:__ When a user clicks on the Menu option in the navigation bar, the url changes to `http://localhost:9000/#/menu`. Within the `app/scripts/routers/application.js` file, the Marionette AppRouter catches this change, and maps the `menu` portion of the url to the `menu` function that is in the `app/scripts/controllers/application.js` file. 
+
+__Controller:__ The `menu` function within `app/scripts/controllers/application.js`:
+
+1. Loads up the menu's main layout view (`var layout = new MenuView();`)
+2. Adds it to the application's main content area (`Application.app.content.show(layout);`)
+3. Fetches the data from the collection (`var menuItems = new MenuItemsCollection();` and `menuItems.fetch().done(function() {`)
+4. Passes the collection into the CompositeView (`collection: menuItems`)
+
+__Views:__ The Menu Page consists of 3 views:
+
+1. `app/scripts/views/menu/layout.js`: Is the main layout view for the Menu Page, it renders the `app/templates/menu/layout.hbs` template and specifies a region for the CompositeView to go into (`menuItems: '[data-view=menu-items]'`)
+2. `app/scripts/views/menu/items.js`: Is the CompositeView that is the container for each ItemView. It renders the `app/templates/menu/items.hbs` template and defines what the item/child view is (`childView: ItemView,`) 
+3. `app/scripts/views/menu/item.js`: Is the ItemView for each menu item. It renders the `app/templates/menu/item.hbs` template, and gets its data (each model) from the CompositeView. Since the CompositeView received a collection of models, Marionette passes each model to the ItemView.
+
+__Templates:__ Each template is rendered by its corresponding view (described in the __Views:__ section above). The one template to take note of is the `app/templates/menu/item.hbs` template. In it is handlebars code that matches each value within the `{{ }}` with what is returned from the model. In our case, the `data/menu.json` file contains an array of objects that have properties in them called 'name', 'quantity', and 'cost'. These match up with the handlebars placeholders in the template.
+
 # Milestone 1
 
 This is the first milestone marker in the tutorial. If you have not walked through the tutorial up to this point, you can checkout the branch called "milestone-1" to get the code that matches up with the tutorial to this point.
@@ -1024,3 +1053,15 @@ That will fix the values, but we still need to fix the headers so they line up a
 Refresh the menu page and you should see something like this:
 
 ![Menu page styled - step 2](/tutorial/MenuPageStyled2.jpg?raw=true "Menu Page Styled step 2")
+
+At the beginning of this tutorial, we said that if you don't see the flag in the header that it could be due to your resolution. We'll take some time now to talk about that. If you look in the `app/templates/application/header.hbs` file at these lines:
+
+```html
+  <div class="visible-md visible-lg">
+    <div class="col-md-1 navbar-flag navbar-flag-green"></div>
+    <div class="col-md-1 navbar-flag navbar-flag-white"></div>
+    <div class="col-md-1 navbar-flag navbar-flag-red"></div>
+  </div>
+```
+
+You'll see the classes `visible-md visible-lg` on the first div. According to [Bootstrap's description](http://getbootstrap.com/css/#responsive-utilities), the `visible-md` class makes the content associated with this class only visible for resolutions greater than or equal to 992px, but less than 1200px. Likewise, the `visible-lg` class makes the content associated with this class only visible for resolutions greater than 1200px. So for us to be able to have our flag visible for resolutions greater than 992px, we need both classes on this div. If the resolution drops below 992px, the content associated with the class will be hidden. 

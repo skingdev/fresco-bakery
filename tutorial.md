@@ -763,6 +763,8 @@ Now if you stop any running grunt processes and run the `grunt serve` command, y
 
 ![Menu page](/tutorial/MenuPage.jpg?raw=true "Menu Page")
 
+#### Backbone flow using the Menu Page
+
 Now let's talk about the Backbone flow using the Menu Page as an example, referencing our diagram from above:
 
 ![Backbone flow](/tutorial/BackboneFlow.jpg?raw=true "Backbone flow")

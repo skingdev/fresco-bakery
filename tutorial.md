@@ -981,3 +981,46 @@ Again, since we've added a file, we'll need to include this new file in the `app
 Now we'll need to put our new class on the appropriate div. In the `app/templates/menu/item.hbs` file, add the `div-row` class to the `<div class="row">` so that it looks like this: `<div class="row div-row">`. Refresh the menu page and you should see something like this:
 
 ![Menu page styled - step 1](/tutorial/MenuPageStyled1.jpg?raw=true "Menu Page Styled step 1")
+
+That's better, except the values in the Quantity and Cost columns are staggered. To fix that, we need to use a Bootstrap style called `text-right`. Bootstrap offers 3 classes for aligning text: `text-left`, `text-center`, and `text-right`. In the file `app/templates/menu/item.hbs`, add the `text-right` class for the quantity and cost columns after the `col-sm-3` class. The file afterwards should look like this:
+
+```html
+<div class="row div-row">
+  <div class="col-sm-3">
+    {{name}}
+  </div>
+
+  <div class="col-sm-3 text-right">
+    {{quantity}}
+  </div>
+
+  <div class="col-sm-3 text-right">
+    {{cost}}
+  </div>
+</div>
+
+```
+
+That will fix the values, but we still need to fix the headers so they line up as well. In the `app/templates/menu/items.hbs` file, add the `text-right` class for the quantity and cost columns after the `col-sm-3` class. The file afterwards should look like this:
+
+```html
+<div class="row">
+  <div class="col-sm-3">
+    <h4>Name</h4>
+  </div>
+
+  <div class="col-sm-3 text-right">
+    <h4>Quantity</h4>
+  </div>
+
+  <div class="col-sm-3 text-right">
+    <h4>Cost (per Quantity)</h4>
+  </div>
+</div>
+
+<div data-view-container></div>
+```
+
+Refresh the menu page and you should see something like this:
+
+![Menu page styled - step 2](/tutorial/MenuPageStyled2.jpg?raw=true "Menu Page Styled step 2")

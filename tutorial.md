@@ -765,18 +765,30 @@ Now if you stop any running grunt processes and run the `grunt serve` command, y
 
 #### Backbone flow using the Menu Page
 
-Now let's talk about the Backbone flow using the Menu Page as an example, referencing our diagram from above:
+Now let's talk about the Backbone flow using the Menu Page as an example:
 
-![Backbone flow](/tutorial/BackboneFlow.jpg?raw=true "Backbone flow")
+![Backbone flow - Menu page](/tutorial/BackboneFlowMenuPage.jpg?raw=true "Backbone flow - Menu Page")
 
 __Router:__ When a user clicks on the Menu option in the navigation bar, the url changes to `http://localhost:9000/#/menu`. Within the `app/scripts/routers/application.js` file, the Marionette AppRouter catches this change, and maps the `menu` portion of the url to the `menu` function that is in the `app/scripts/controllers/application.js` file. 
 
 __Controller:__ The `menu` function within `app/scripts/controllers/application.js`:
 
-1. Loads up the menu's main layout view (`var layout = new MenuView();`)
-2. Adds it to the application's main content area (`Application.app.content.show(layout);`)
-3. Fetches the data from the collection (`var menuItems = new MenuItemsCollection();` and `menuItems.fetch().done(function() {`)
-4. Passes the collection into the CompositeView (`collection: menuItems`)
+```javascript
+  menu: function() {
+    Backbone.history.navigate('#/menu');
+
+    var layout = new MenuView();                // Loads up the menu's main layout view 
+    Application.app.content.show(layout);       // Adds it to the application's main content area
+
+    var menuItems = new MenuItemsCollection();  // Creates a new collection of menu items
+    menuItems.fetch().done(function() {         // Fetches the data from the collection
+
+      layout.menuItems.show(new MenuItemsView({ 
+        collection: menuItems                   // passes the collection into the CompositeView
+      }));
+    });
+  },
+```
 
 __Views:__ The Menu Page consists of 3 views:
 
